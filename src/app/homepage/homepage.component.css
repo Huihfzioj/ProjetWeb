@@ -1,0 +1,136 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 700;
+    font-style: bold;
+}
+@font-face {
+    font-family: 'InterMed';
+    src: url(/Inter-VariableFont_opsz,wght.ttf) format('truetype');
+    font-weight: 500;
+    font-style: medium;
+}
+@font-face {
+    font-family: 'Inter-elts';
+    src: url('/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100;
+    font-style: thin;
+}
+@font-face {
+    font-family: 'Poppins_button';
+    src: url('/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: regular;
+}
+.home{
+    scroll-behavior: smooth;
+}
+#navbar {
+    display: flex; 
+    align-items: center; 
+    gap:150px;
+    background-color: #0071C1;
+    position: fixed; /* Optional: Fix the navbar at the top of the screen */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    right: 0; /* Align to the right */
+    height: 80px;
+}
+#title{
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+    font-size: 32px;
+}
+.circle-image {
+    background-size: cover;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-left: 15px;
+  }
+.logo-group {
+    display: flex; /* Align logo and title horizontally */
+    align-items: center; /* Vertically center the items */
+    gap: 10px; /* Add space between the logo and title */
+}
+.navbar-elts{
+    font-family: 'Inter-elts', sans-serif;
+    display: flex;
+    align-items: center;
+    gap:20px;
+    color: #FFFFFF;
+    font-size: 12px;
+}
+#login_button{
+    background-color: #0071C1;
+    color:#FFFFFF;
+    border: 1px,solid, #FFFFFF;
+    border-radius: 8px;
+    font-family: 'Poppins_button', sans-serif;
+    font-size:16px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+#sign_button{
+    background-color: #FFFFFF;
+    color:#0071C1;
+    border: 1px,solid, #FFFFFF;
+    border-radius: 8px;
+    font-family: 'Poppins_button', sans-serif;
+    font-size:16px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right:15px ;
+}
+.button_grp{
+    display: flex; 
+    align-items: center; 
+    gap:15px;
+}
+.right_nav{
+    display: flex;
+    align-items: center;  
+    gap:50px;
+    margin-right: 0px;
+    margin-left: auto;
+}
+#join_button{
+    background-color: #4F9CF9;
+    color:#FFFFFF;
+    border: 1px,solid, #FFFFFF;
+    border-radius: 8px;
+    font-family: 'InterMed', sans-serif;
+    font-size:16px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right:15px ;
+}
+#heading{
+    margin-top: 80px;
+    background-color: #0071C1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.intro_text{
+    display: block;
+    color: #FFFFFF;
+    margin-left: 120px;
+    margin-top: 100px;
+}
+#slogan{
+    font-family: 'Inter','sans-serif';
+    font-size: 64px;
+}
+.intro_text h4{
+    font-family: 'Inter-elts','sans-serif';
+    font-size: 18px;
+    
+}
