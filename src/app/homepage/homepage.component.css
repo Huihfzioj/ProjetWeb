@@ -11,6 +11,12 @@
     font-style: medium;
 }
 @font-face {
+    font-family: 'InterReg';
+    src: url(/Inter-VariableFont_opsz,wght.ttf) format('truetype');
+    font-weight: 300;
+    font-style:normal;
+}
+@font-face {
     font-family: 'Inter-elts';
     src: url('/Inter-VariableFont_opsz,wght.ttf') format('truetype');
     font-weight: 100;
@@ -22,19 +28,31 @@
     font-weight: 400;
     font-style: regular;
 }
+@font-face {
+    font-family: 'Poppins';
+    src: url('/Poppins-Thin.ttf') format('truetype');
+    font-weight: 3;
+    font-style: thin;
+}
+html {
+    scroll-behavior: smooth; /* Add this to your global styles.css */
+  }
 .home{
-    scroll-behavior: smooth;
+    width: 100%;
+    position: absolute;
+    left: 0;
 }
 #navbar {
     display: flex; 
     align-items: center; 
     gap:150px;
     background-color: #0071C1;
-    position: fixed; /* Optional: Fix the navbar at the top of the screen */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    right: 0; /* Align to the right */
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    right: 0;
     height: 80px;
+    z-index: 1000;
 }
 #title{
     font-family: 'Inter', sans-serif;
@@ -53,14 +71,19 @@
     align-items: center; /* Vertically center the items */
     gap: 10px; /* Add space between the logo and title */
 }
-.navbar-elts{
+.navbar-elts {
     font-family: 'Inter-elts', sans-serif;
     display: flex;
     align-items: center;
     gap:20px;
     color: #FFFFFF;
-    font-size: 12px;
+    font-size: 18px;
 }
+.navbar-elts a {
+    color: inherit;
+    text-decoration: none;
+    font: inherit;
+  }
 #login_button{
     background-color: #0071C1;
     color:#FFFFFF;
@@ -111,19 +134,21 @@
     padding-bottom: 8px;
     margin-right:15px ;
 }
-#heading{
-    margin-top: 80px;
+#heading {
     background-color: #0071C1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: 750px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    width: 100%;
+    margin: 0;
 }
+
 .intro_text{
     display: block;
     color: #FFFFFF;
-    margin-left: 120px;
-    margin-top: 100px;
+    margin-left: 90px;
 }
 #slogan{
     font-family: 'Inter','sans-serif';
@@ -133,4 +158,84 @@
     font-family: 'Inter-elts','sans-serif';
     font-size: 18px;
     
+}
+#question{
+    margin-top:60px;
+}
+.intro{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+}
+.logo-enicar{
+    width: 650px;
+    height: 300px;
+    margin-top: 125px;
+    margin-left: 100px;
+}
+#about{
+    margin-top: 100px;
+}
+#about h4{
+    color: #0093FF;
+    margin-left: 44px;
+    font-family: 'Poppins';
+    font-size: 30px;
+    margin-top: 45px;
+    margin-bottom: 0px;
+}
+.alumni{
+    color: #303A42;
+    font-family: 'Poppins_button';
+    font-size: 35px;
+    margin-left:44px;
+    margin-top: 0px;
+}
+.about_Img_text{
+    display: flex;
+    align-items: center;
+    gap:300px;
+    margin-left: 36px;
+    font-family:'InterReg';
+    color: #303A42;
+    font-size: 20px;
+    margin-top: -20px;
+    line-height: 2;
+}
+.Images{
+    position: relative;
+    z-index: 0;
+}
+.clasping-hands-img{
+    object-fit: cover;
+}
+.review-stars-img{
+    position: absolute;
+    left: -80px;
+    bottom: 80px;
+    height:58px;
+    width: 198px;
+    transform: rotate(8deg);
+    filter: drop-shadow(5px 5px 40px rgba(0, 0, 0, 0.5));
+    z-index: 1;
+}
+.join{
+    position: relative;
+    display: block;
+    top: 50%;
+    left: 20%;
+}
+#ready_join_button{
+    position: absolute;
+    background-color: #0787E5;
+    font-family: 'Inter';
+    font-size: 18px;
+    color: #FFFFFF;
+    padding: 15px;
+    cursor: pointer;
+    left:27%;
+    top: 45%;
+    border-radius: 10px;
+    border: 1px,solid, #FFFFFF;
 }
