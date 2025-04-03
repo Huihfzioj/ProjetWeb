@@ -239,3 +239,74 @@ html {
     border-radius: 10px;
     border: 1px,solid, #FFFFFF;
 }
+#why h4{
+    color: #0093FF;
+    margin-left: 47%;
+    font-family: 'Poppins';
+    font-size: 30px;
+    margin-top: 80px;
+    margin-bottom: 0px;
+}
+#why h2{
+    color: #303A42;
+    font-family: 'Poppins_button';
+    font-size: 30px;
+    margin-left:44%;
+    margin-top: 0px;
+}
+#why{
+    background-image: url("/element.svg");
+    background-size: 2875px 1900px;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow-x: hidden;
+}
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+  
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    padding-top: 80px;
+  }
+  .feature-card h2{
+    margin-left: 0px !important;
+    margin-top: -10px;
+    font-size: 27px !important;
+  }
+  .feature-card h3{
+    font-family: 'Inter-elts';
+    font-size: 18px;
+    color: rgba(48,58,66,0.8);
+  }
+.vector-container {
+    width: 68px;
+    height: 68px;
+  border-radius: 50%;
+  background: #DCF0FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -25px; /* Half outside card */
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .feature-vector {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
