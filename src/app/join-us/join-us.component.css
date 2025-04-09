@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 
 * {
+=======
+ *{
+>>>>>>> Stashed changes
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -65,7 +69,10 @@
     background-color: #D3D3D3;
     color: #333;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
   }
   
   .signup-form, .login-form {
@@ -109,7 +116,11 @@
 
   /* Student Form */
   .student-form {
+<<<<<<< Updated upstream
     width: 100%;}
+=======
+    width: 100%;
+>>>>>>> Stashed changes
 
   .form-group {
     margin-bottom: 20px;
@@ -188,6 +199,11 @@
     color: #4A90E2;
     text-decoration: none;
   }
+<<<<<<< Updated upstream
+=======
+  
+
+>>>>>>> Stashed changes
   .terms-agreement a:hover {
     text-decoration: underline;
   }
@@ -214,12 +230,21 @@
   /* Log In Form (Simpler Version) */
   .form-box {
     margin-top: 20px;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   .login-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+<<<<<<< Updated upstream
   }}
+=======
+
+  }
+>>>>>>> Stashed changes
   
   .form {
     display: flex;
@@ -228,6 +253,11 @@
     font-size: 14px;
     color: #333;
   }
+<<<<<<< Updated upstream
+=======
+  
+
+>>>>>>> Stashed changes
   .title {
     font-size: 24px;
     font-weight: bold;
@@ -270,7 +300,7 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition:  0.3s;
   }
   
   .form button:hover {
@@ -296,6 +326,10 @@
   
   .form-section a:hover {
     text-decoration: underline;
+<<<<<<< Updated upstream
+=======
+  }
+>>>>>>> Stashed changes
   .remember-me input {
     margin-right: 5px;
   }
@@ -321,4 +355,10 @@
   
   .submit-button:hover {
     background-color: #4A90E2;
+<<<<<<< Updated upstream
     color: white;}}
+=======
+    color: white;
+
+  }
+>>>>>>> Stashed changes
