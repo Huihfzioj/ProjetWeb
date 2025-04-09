@@ -1,94 +1,130 @@
-.join-us-container {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
   }
   
+  /* Background for the entire page */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4A90E2 0%, #1E3A8A 100%);
+    padding: 20px;
+  }
+  
+  /* Container for the entire interface */
+  .join-us-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  }
+  
+  /* Tabs for Sign Up and Log In */
   .auth-choice {
     display: flex;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #eee;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
   
   .auth-tab {
     flex: 1;
-    padding: 1rem;
-    background: none;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
     border: none;
     cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #666;
-    position: relative;
+    border-radius: 10px 10px 0 0;
+    transition: background-color 0.3s;
   }
   
   .auth-tab.active {
-    color: #0066cc;
+    background-color: #4A90E2;
+    color: white;
   }
   
-  .auth-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: #0066cc;
+  .auth-tab:not(.active) {
+    background-color: #D3D3D3;
+    color: #333;
   }
   
+  /* Sign Up Form */
+  .signup-form {
+    padding: 10px;
+  }
+  
+  /* Radio buttons for user type selection */
   .user-type-selector {
-    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
   
   .radio-option {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    font-size: 14px;
+    color: #333;
     cursor: pointer;
   }
   
   .radio-button {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #ccc;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333;
     border-radius: 50%;
-    margin-right: 10px;
-    position: relative;
+    margin-right: 5px;
+    display: inline-block;
   }
   
   .radio-button.selected {
-    border-color: #0066cc;
+    background-color: #333;
   }
   
-  .radio-button.selected::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 10px;
-    height: 10px;
-    background: #0066cc;
-    border-radius: 50%;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  input {
+  /* Student Form */
+  .student-form {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
   }
   
+  /* Form group for input fields */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .form-group input:focus {
+    border-color: #4A90E2;
+  }
+  
+  /* Password field with toggle */
   .password-group {
     position: relative;
+  }
+  
+  .password-group input {
+    padding-right: 60px;
   }
   
   .toggle-password {
@@ -96,65 +132,131 @@
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #0066cc;
+    font-size: 12px;
+    color: #4A90E2;
     cursor: pointer;
-    font-size: 0.9rem;
   }
   
+  /* Password hint */
   .password-hint {
+    font-size: 12px;
     color: #666;
-    font-size: 0.8rem;
-    margin-top: -1rem;
-    margin-bottom: 1.5rem;
+    margin-top: 5px;
   }
   
+  /* Terms agreement */
   .terms-agreement {
-    margin: 1.5rem 0;
-    font-size: 0.9rem;
+    font-size: 12px;
     color: #666;
+    text-align: center;
+    margin-bottom: 20px;
   }
   
   .terms-agreement a {
-    color: #0066cc;
+    color: #4A90E2;
     text-decoration: none;
   }
   
+  .terms-agreement a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Submit button for Sign Up */
   .submit-button {
     width: 100%;
     padding: 12px;
-    background: #0066cc;
-    color: white;
+    background-color: #D3D3D3;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
     border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s;
   }
   
   .submit-button:hover {
-    background: #0052a3;
+    background-color: #4A90E2;
+    color: white;
   }
   
-  .login-options {
+  /* Log In Form (Simpler Version) */
+  .form-box {
+    margin-top: 20px;
+  }
+  
+  .form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 1.5rem 0;
-  }
-  
-  .remember-me {
-    display: flex;
+    flex-direction: column;
     align-items: center;
   }
   
-  .remember-me input {
-    width: auto;
-    margin-right: 8px;
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
   }
   
-  .forgot-password {
-    color: #0066cc;
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .form-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .form-container input:focus {
+    border-color: #4A90E2;
+  }
+  
+  .form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #D3D3D3;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .form button:hover {
+    background-color: #4A90E2;
+    color: white;
+  }
+  
+  .form-section {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .form-section p {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .form-section a {
+    color: #4A90E2;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  
+  .form-section a:hover {
+    text-decoration: underline;
   }

@@ -1,31 +1,21 @@
-/*import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-join-us',
-  imports: [],
-  templateUrl: './join-us.component.html',
-  styleUrl: './join-us.component.css'
-})
-export class JoinUsComponent {
-
-}*/
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // Import FormsModule for [(ngModel)]
+import { RouterLink } from '@angular/router'; // Import RouterLink for routerLink directive
+import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf, *ngFor, etc.
 
 @Component({
   selector: 'app-join-us',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './join-us.component.html',
   styleUrls: ['./join-us.component.css']
 })
-export class JoinUsComponent {
-  isSignUpTab: boolean = true;
-  userType: 'student' | 'alumni' = 'student';
+export class JoinUsComponent implements OnInit {
+  isSignUpTab: boolean = true; // Initialize to show Sign Up tab by default
+  userType: string = 'student'; // Default to student form
   showPassword: boolean = false;
 
-  // Student form model
+  // Initialize form data objects
   student = {
     firstName: '',
     lastName: '',
@@ -33,51 +23,54 @@ export class JoinUsComponent {
     password: ''
   };
 
-  // Alumni form model
   alumni = {
     fullName: '',
-    graduationYear: '',
+    graduationYear: null as number | null,
     email: '',
     id: '',
     department: '',
     password: ''
   };
 
-  // Login form model
   login = {
     email: '',
-    password: '',
-    rememberMe: false
+    password: ''
   };
 
-  showSignUp() {
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  // Toggle between Sign Up and Log In tabs
+  showSignUp(): void {
     this.isSignUpTab = true;
   }
 
-  showLogin() {
+  showLogin(): void {
     this.isSignUpTab = false;
   }
 
-  selectUserType(type: 'student' | 'alumni') {
+  // Select user type (student or alumni)
+  selectUserType(type: string): void {
     this.userType = type;
   }
 
-  togglePassword() {
+  // Toggle password visibility
+  togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit() {
+  // Handle form submission for Sign Up
+  onSubmit(): void {
     if (this.userType === 'student') {
-      console.log('Student sign up:', this.student);
-      // Ajoutez ici la logique pour l'inscription étudiant
+      console.log('Student Sign Up:', this.student);
     } else {
-      console.log('Alumni sign up:', this.alumni);
-      // Ajoutez ici la logique pour l'inscription alumni
+      console.log('Alumni Sign Up:', this.alumni);
     }
   }
 
-  onLogin() {
-    console.log('Login attempt:', this.login);
-    // Ajoutez ici la logique de connexion
+  // Handle form submission for Log In
+  onLogin(): void {
+    console.log('Log In:', this.login);
   }
 }
