@@ -1,12 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { AppComponent } from './app/app.component';
-import { HomepageComponent } from './app/homepage/homepage.component';
-import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes'; // Fichier séparé pour les routes
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter([
-      { path: '', component: HomepageComponent },
-    ])
+    provideRouter(routes, withComponentInputBinding())
   ]
-});
+}).catch(err => console.error(err));

@@ -12,6 +12,7 @@
             </div>
             <div class="button_grp">
                 <button id="login_button">Log in</button>
+                <button id="sign_button" (click)="navigateToJoinUs()">Join Us</button>
                 <button id="sign_button">Sign up</button>
             </div>
         </div>
@@ -23,7 +24,7 @@
                 <h1 id="slogan">Networking at its <br> finest</h1>
                 <h4>Mentorship, Internships, and More – Powered by Alumni.<br>Start connecting today—your future starts here!</h4>
                 <h4 id="question">Are you an Enicarthage graduate or current student?</h4>
-                <button id="join_button">Join us -></button>
+                <button id="join_button" (click)="navigateToJoinUs()">Join us -></button>
             </div>
             <img src="/Logo_ENICarthage.jpg" alt="Enicarthage's Logo" class="logo-enicar">
         </div>
@@ -42,7 +43,7 @@
         </div>
         <div class="join">
         <img src="/ready.png" class="ready-join-img">
-        <button id="ready_join_button">Join Us</button>
+        <button id="ready_join_button" (click)="navigateToJoinUs()">Join Us</button>
         </div>
     </section>
     <section id="why">
@@ -76,14 +77,14 @@
                     <img src="/whyvectors/whyVect4.svg" alt="Feature 4" style="width:50px;height:50px" class="feature-vector">
                 </div>
                 <h2>Skill Development and <br> Learning</h2>
-                <h3> Access resources shared by <br> alumni to help you develop in-<br>demand skills and get expert <br> advice on crafting resumes and <br>acing interviews.</h3>
+                <h3> Access resources shared by <br> alumni to help you develop in-<br>demand skills and get expert <br> advice on crafting resumes and <br>acing interviews.</h3>
             </div>
             <div class="feature-card">
                 <div class="vector-container">
                     <img src="/whyvectors/whyVect5.svg" alt="Feature 5" style="width:50px;height:50px" class="feature-vector">
                 </div>
                 <h2>Access to Exclusive <br>Opportunities</h2>
-                <h3> Explore job and internship <br> opportunities shared exclusively <br>by alumni and get referred to top<br> companies.</h3>
+                <h3> Explore job and internship <br> opportunities shared exclusively <br>by alumni and get referred to top<br> companies.</h3>
             </div>
             <div class="feature-card">
                 <div class="vector-container">
@@ -101,11 +102,11 @@
         <img src="/logo_inverted.png" alt="AlumniEngine's logo" style="width:45px;height:45px;" class="inerted_logo">
         <h2 class="text_footer">Alumni Engine</h2>
         </div>
-        <button id="join_us_button"><strong>Join Us</strong></button>
+        <button id="join_us_button" (click)="navigateToJoinUs()"><strong>Join Us</strong></button>
         </div>
         <div class="navigation_footer">
             <a href="#about"><strong>About</strong></a><br>
-            <a  routerLink="/terms"><strong>Terms of Use and Privacy Policy</strong></a><br>
+            <a (click)="navigateToTerms()"><strong>Terms of Use and Privacy Policy</strong></a><br>
             <a href="#home"><strong>Home</strong></a><br>
             <a href="http://www.enicarthage.rnu.tn/"><strong>University's website</strong></a><br>
         </div>

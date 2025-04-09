@@ -1,0 +1,94 @@
+<div class="join-us-container">
+    <div class="auth-choice">
+      <button class="auth-tab" [class.active]="isSignUpTab" (click)="showSignUp()">Sign Up</button>
+      <button class="auth-tab" [class.active]="!isSignUpTab" (click)="showLogin()">Log In</button>
+    </div>
+  
+    <!-- Sign Up Form -->
+    <div class="signup-form" *ngIf="isSignUpTab">
+      <div class="user-type-selector">
+        <div class="radio-option" (click)="selectUserType('student')">
+          <span class="radio-button" [class.selected]="userType === 'student'"></span>
+          <span>Enicarthage Student</span>
+        </div>
+        
+        <div class="radio-option" (click)="selectUserType('alumni')">
+          <span class="radio-button" [class.selected]="userType === 'alumni'"></span>
+          <span>Enicarthage Alumni</span>
+        </div>
+      </div>
+  
+      <!-- Student Form -->
+      <div class="student-form" *ngIf="userType === 'student'">
+        <div class="form-group">
+          <input type="text" placeholder="First name" [(ngModel)]="student.firstName">
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Last name" [(ngModel)]="student.lastName">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="University email address" [(ngModel)]="student.email">
+        </div>
+        <div class="form-group password-group">
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="student.password">
+          <span class="toggle-password" (click)="togglePassword()">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </span>
+        </div>
+        <p class="password-hint">Use 8 or more characters with a mix of letters, numbers & symbols</p>
+      </div>
+  
+      <!-- Alumni Form -->
+      <div class="alumni-form" *ngIf="userType === 'alumni'">
+        <div class="form-group">
+          <input type="text" placeholder="Full name" [(ngModel)]="alumni.fullName">
+        </div>
+        <div class="form-group">
+          <input type="number" placeholder="Graduation Year" [(ngModel)]="alumni.graduationYear">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Email address" [(ngModel)]="alumni.email">
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="ID" [(ngModel)]="alumni.id">
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Department" [(ngModel)]="alumni.department">
+        </div>
+        <div class="form-group password-group">
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="alumni.password">
+          <span class="toggle-password" (click)="togglePassword()">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </span>
+        </div>
+        <p class="password-hint">Use 8 or more characters with a mix of letters, numbers & symbols</p>
+      </div>
+  
+      <div class="terms-agreement">
+        <p>By creating an account, you agree to the <a routerLink="/terms">Terms of use</a> and <a routerLink="/terms">Privacy Policy</a>.</p>
+      </div>
+  
+      <button class="submit-button" (click)="onSubmit()">Sign Up</button>
+    </div>
+  
+    <!-- Login Form -->
+    <div class="login-form" *ngIf="!isSignUpTab">
+      <div class="form-group">
+        <input type="email" placeholder="Email address" [(ngModel)]="login.email">
+      </div>
+      <div class="form-group password-group">
+        <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="login.password">
+        <span class="toggle-password" (click)="togglePassword()">
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </span>
+      </div>
+      <div class="login-options">
+        <div class="remember-me">
+          <input type="checkbox" id="remember" [(ngModel)]="login.rememberMe">
+          <label for="remember">Remember me</label>
+        </div>
+        <a href="#" class="forgot-password">Forgot your password?</a>
+      </div>
+      <button class="submit-button" (click)="onLogin()">Log In</button>
+    </div>
+  </div>
