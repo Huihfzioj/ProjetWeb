@@ -1,0 +1,43 @@
+.join-us-container {
+    font-family: 'Inter', sans-serif;
+    color: #303A42;
+  }
+  
+  .registration-form {
+    max-width: 500px;
+    margin-top: 40px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: 'InterMed';
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'InterReg';
+  }
+  
+  #register-button {
+    background-color: #0071C1;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'InterMed';
+    margin-top: 15px;
+  }
+  
+  .login-redirect {
+    margin-top: 20px;
+    font-family: 'InterReg';
+  }
