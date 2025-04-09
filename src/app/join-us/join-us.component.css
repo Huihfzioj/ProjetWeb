@@ -1,8 +1,19 @@
+<<<<<<< HEAD
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
+=======
+.join-us-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+>>>>>>> 7a77b42e9a151f8072696ce34dda226c075a570b
   }
   
   /* Background for the entire page */
@@ -53,6 +64,13 @@
   .auth-tab:not(.active) {
     background-color: #D3D3D3;
     color: #333;
+<<<<<<< HEAD
+=======
+  }
+  
+  .signup-form, .login-form {
+    padding: 10px;
+>>>>>>> 7a77b42e9a151f8072696ce34dda226c075a570b
   }
   
   /* Sign Up Form */
@@ -88,9 +106,23 @@
     background-color: #333;
   }
   
+<<<<<<< HEAD
   /* Student Form */
   .student-form {
     width: 100%;
+=======
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+>>>>>>> 7a77b42e9a151f8072696ce34dda226c075a570b
   }
   
   /* Form group for input fields */
@@ -157,6 +189,7 @@
     text-decoration: none;
   }
   
+<<<<<<< HEAD
   .terms-agreement a:hover {
     text-decoration: underline;
   }
@@ -183,14 +216,24 @@
   /* Log In Form (Simpler Version) */
   .form-box {
     margin-top: 20px;
+=======
+  .login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+>>>>>>> 7a77b42e9a151f8072696ce34dda226c075a570b
   }
   
   .form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 14px;
+    color: #333;
   }
   
+<<<<<<< HEAD
   .title {
     font-size: 24px;
     font-weight: bold;
@@ -259,4 +302,32 @@
   
   .form-section a:hover {
     text-decoration: underline;
+=======
+  .remember-me input {
+    margin-right: 5px;
+  }
+  
+  .forgot-password {
+    font-size: 14px;
+    color: #4A90E2;
+    text-decoration: none;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #D3D3D3;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #4A90E2;
+    color: white;
+>>>>>>> 7a77b42e9a151f8072696ce34dda226c075a570b
   }
