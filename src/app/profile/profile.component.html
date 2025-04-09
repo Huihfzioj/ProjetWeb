@@ -1,0 +1,43 @@
+<div class="profile-container">
+    <div class="header">
+      <h1>Recent posts</h1>
+    </div>
+  
+    <div class="user-profile">
+      <div class="user-info">
+        <h2>{{ user.name }}</h2>
+        <p class="role">{{ user.role }}</p>
+        
+        <ul class="details">
+          <li><strong>Graduation Year:</strong> {{ user.graduationYear }}</li>
+          <li><strong>Job Title:</strong> {{ user.jobTitle }}</li>
+          <li><strong>Company:</strong> {{ user.company }}</li>
+          <li><strong>{{ user.employmentType }}</strong></li>
+          <li><strong>Industry:</strong> {{ user.industry }}</li>
+        </ul>
+  
+        <div class="badges">
+          <span *ngFor="let badge of user.badges" class="badge">{{ badge }}</span>
+        </div>
+  
+        <div class="skills">
+          <h3>Skills:</h3>
+          <p *ngIf="user.skills.length === 0">Not specified</p>
+          <ul *ngIf="user.skills.length > 0">
+            <li *ngFor="let skill of user.skills">{{ skill }}</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="posts-section" *ngIf="!user.hasPosts">
+        <h2>No Available Posts</h2>
+        <button class="publish-button">Click Here To Publish Your First Post</button>
+      </div>
+  
+      <div class="post-editor">
+        <h3>Post</h3>
+        <textarea placeholder="What's on your mind?"></textarea>
+        <button class="post-button">Post</button>
+      </div>
+    </div>
+  </div>

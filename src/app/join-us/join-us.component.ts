@@ -1,14 +1,3 @@
-/*import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-join-us',
-  imports: [],
-  templateUrl: './join-us.component.html',
-  styleUrl: './join-us.component.css'
-})
-export class JoinUsComponent {
-
-}*/
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -21,11 +10,11 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./join-us.component.css']
 })
 export class JoinUsComponent {
-  isSignUpTab: boolean = true;
+  isSignUpTab = true;
   userType: 'student' | 'alumni' = 'student';
-  showPassword: boolean = false;
+  showPassword = false;
 
-  // Student form model
+  // Modèles de formulaire
   student = {
     firstName: '',
     lastName: '',
@@ -33,7 +22,6 @@ export class JoinUsComponent {
     password: ''
   };
 
-  // Alumni form model
   alumni = {
     fullName: '',
     graduationYear: '',
@@ -43,41 +31,49 @@ export class JoinUsComponent {
     password: ''
   };
 
-  // Login form model
   login = {
     email: '',
     password: '',
     rememberMe: false
   };
 
-  showSignUp() {
-    this.isSignUpTab = true;
+  // Basculer entre Sign Up et Login
+  setActiveTab(isSignUp: boolean) {
+    this.isSignUpTab = isSignUp;
+    this.resetForms();
   }
 
-  showLogin() {
-    this.isSignUpTab = false;
-  }
-
+  // Sélectionner le type d'utilisateur
   selectUserType(type: 'student' | 'alumni') {
     this.userType = type;
   }
 
-  togglePassword() {
+  // Afficher/masquer le mot de passe
+  togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
+  // Soumission du formulaire Sign Up
   onSubmit() {
     if (this.userType === 'student') {
-      console.log('Student sign up:', this.student);
-      // Ajoutez ici la logique pour l'inscription étudiant
+      console.log('Inscription Étudiant:', this.student);
+      // TODO: Implémenter l'inscription
     } else {
-      console.log('Alumni sign up:', this.alumni);
-      // Ajoutez ici la logique pour l'inscription alumni
+      console.log('Inscription Alumni:', this.alumni);
+      // TODO: Implémenter l'inscription
     }
   }
 
+  // Soumission du formulaire Login
   onLogin() {
-    console.log('Login attempt:', this.login);
-    // Ajoutez ici la logique de connexion
+    console.log('Connexion:', this.login);
+    // TODO: Implémenter la connexion
+  }
+
+  // Réinitialiser les formulaires
+  private resetForms() {
+    this.student = { firstName: '', lastName: '', email: '', password: '' };
+    this.alumni = { fullName: '', graduationYear: '', email: '', id: '', department: '', password: '' };
+    this.login = { email: '', password: '', rememberMe: false };
   }
 }
