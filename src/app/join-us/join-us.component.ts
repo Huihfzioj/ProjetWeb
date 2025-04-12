@@ -1,19 +1,13 @@
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for [(ngModel)]
 import { RouterLink } from '@angular/router'; // Import RouterLink for routerLink directive
 import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf, *ngFor, etc.
-<<<<<<< Updated upstream
-=======
+
 
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
->>>>>>> Stashed changes
 
 @Component({
   selector: 'app-join-us',
@@ -22,18 +16,14 @@ import { RouterLink } from '@angular/router';
   templateUrl: './join-us.component.html',
   styleUrls: ['./join-us.component.css']
 })
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 export class JoinUsComponent implements OnInit {
   isSignUpTab: boolean = true; // Initialize to show Sign Up tab by default
   userType: string = 'student'; // Default to student form
   showPassword: boolean = false;
 
   // Initialize form data objects
-<<<<<<< Updated upstream
-=======
+
 
 export class JoinUsComponent {
   isSignUpTab = true;
@@ -42,7 +32,7 @@ export class JoinUsComponent {
 
   // Modèles de formulaire
 
->>>>>>> Stashed changes
+
   student = {
     firstName: '',
     lastName: '',

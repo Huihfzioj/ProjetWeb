@@ -1,9 +1,9 @@
-<<<<<<< Updated upstream
+
 
 * {
-=======
+
  *{
->>>>>>> Stashed changes
+
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -69,10 +69,7 @@
     background-color: #D3D3D3;
     color: #333;
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
   }
   
   .signup-form, .login-form {
@@ -116,11 +113,9 @@
 
   /* Student Form */
   .student-form {
-<<<<<<< Updated upstream
+
     width: 100%;}
-=======
-    width: 100%;
->>>>>>> Stashed changes
+
 
   .form-group {
     margin-bottom: 20px;
@@ -199,11 +194,10 @@
     color: #4A90E2;
     text-decoration: none;
   }
-<<<<<<< Updated upstream
-=======
+
   
 
->>>>>>> Stashed changes
+
   .terms-agreement a:hover {
     text-decoration: underline;
   }
@@ -230,21 +224,19 @@
   /* Log In Form (Simpler Version) */
   .form-box {
     margin-top: 20px;
-<<<<<<< Updated upstream
-=======
+  }
 
->>>>>>> Stashed changes
+
   .login-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-<<<<<<< Updated upstream
-  }}
-=======
 
-  }
->>>>>>> Stashed changes
+  }}
+
+
+  
   
   .form {
     display: flex;
