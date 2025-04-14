@@ -11,6 +11,16 @@ import { RouterLink } from '@angular/router';
 })
 export class HomepageComponent {
   constructor(private router: Router) {}
+  // Navigation to Sign Up page
+  navigateToSignUp(): void {
+    this.router.navigate(['/sign-up']);
+  }
+
+  // Navigation to Log In page
+  navigateToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
 
   // Navigation vers Join Us
   navigateToJoinUs() {
