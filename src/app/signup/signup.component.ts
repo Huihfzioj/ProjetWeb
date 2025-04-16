@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class SignUpComponent {
 
-  
+  constructor(private router: Router) {}
 
   isSignUpTab: boolean = true; // Always true for Sign Up page
   userType: string = 'student';
@@ -34,7 +34,7 @@ export class SignUpComponent {
     department: '',
     password: ''
   };
-  router: any;
+ 
 
   selectUserType(type: string): void {
     this.userType = type;
@@ -44,18 +44,51 @@ export class SignUpComponent {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(): void {
-    if (this.userType === 'student') {
-      console.log('Student Sign Up:', this.student);
-      console.log('Navigating to /profile');
-      this.router.navigate(['/profile'], { state: { user: this.student, userType: this.userType } });
-    } else {
-      console.log('Alumni Sign Up:', this.alumni);
-      // Navigate to Profile page, passing the alumni data
-      console.log('Navigating to /profile');
-      this.router.navigate(['/profile'], { state: { user: this.alumni, userType: this.userType } });
-    // Optionally, navigate back to homepage or show a success message
-  }
-
   
-}}
+  
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    console.log('Form data - Student:', this.student);
+  console.log('Form data - Alumni:', this.alumni);
+
+    if (this.userType === 'student') {
+      console.log('Student form valid:', this.isStudentFormValid());
+      if (this.isStudentFormValid()) {
+        console.log('Navigating to profile...');
+        this.router.navigate(['/profile'], {
+          state: { user: this.student, userType: this.userType }
+        });
+      } else {
+        alert('Please fill all student fields!');
+      }
+    } else {
+      console.log('Alumni form valid:', this.isAlumniFormValid());
+      if (this.isAlumniFormValid()) {
+        console.log('Navigating to verification-pending with....');
+        this.router.navigate(['/verification-pending'], {
+          state: { user: this.alumni, userType: this.userType }
+        });
+      } else {
+        alert('Please fill all alumni fields!');
+        // Add error handling (show message to user)
+      }}}
+      private isStudentFormValid(): boolean {
+        return (
+          this.student.firstName?.trim().length > 0 &&
+          this.student.lastName?.trim().length > 0 &&
+          this.student.email?.trim().length > 0 &&
+          this.student.password?.trim().length >= 8
+        );
+      }
+      
+      private isAlumniFormValid(): boolean {
+        return (
+          this.alumni.fullName?.trim().length > 0 &&
+          this.alumni.graduationYear !== null &&
+          this.alumni.email?.trim().length > 0 &&
+          this.alumni.id?.trim().length > 0 &&
+          this.alumni.department?.trim().length > 0 &&
+          this.alumni.password?.trim().length >= 8
+        );
+      }
+}

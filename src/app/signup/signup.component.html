@@ -14,7 +14,7 @@
   
       <!-- Student Form -->
       <div class="student-form" *ngIf="userType === 'student'">
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit($event)">
           <div class="form-group">
             <label for="first-name">First name</label>
             <input type="text" id="first-name" placeholder="First name" [(ngModel)]="student.firstName" name="firstName" required>
@@ -44,7 +44,7 @@
   
       <!-- Alumni Form -->
       <div class="student-form" *ngIf="userType === 'alumni'">
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit($event)">
           <div class="form-group">
             <label for="full-name">Full name</label>
             <input type="text" id="full-name" placeholder="Full name" [(ngModel)]="alumni.fullName" name="fullName" required>

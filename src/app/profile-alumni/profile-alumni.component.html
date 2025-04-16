@@ -1,0 +1,52 @@
+<div class="container">
+  <!-- Sidebar (Profile Section) -->
+  <div class="sidebar">
+    <div class="profile-header">
+      <img src="/profileimg.svg" alt="Profile Picture" class="profile-pic">
+      <h2>Alexa Rawles</h2>
+      <p class="role">Alumni</p>
+    </div>
+    <ul class="profile-info">
+      <li><strong>Graduation Year:</strong> 2021</li>
+      <li><strong>Job Title:</strong> Developer</li>
+      <li><strong>Company:</strong> XY</li>
+      <li><strong>Full-Time:</strong> XY</li>
+      <li><strong>Industry:</strong> Web Development</li>
+    </ul>
+    <ul class="interests">
+      <li>👩‍🎓 Mentor</li>
+      <li>📚 Job/Internship Referrals</li>
+      <li>💡 Career Advice</li>
+    </ul>
+    <div class="skills">
+      <h3>Skills:</h3>
+      <p>Not Specified</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <div class="top-nav">
+      <input type="text" placeholder="Search" class="search-bar">
+      <div class="nav-icons">
+        <span>🏠</span> <!-- Home icon -->
+        <span>📄</span> <!-- Documents icon -->
+        <span>✉️</span> <!-- Messages icon -->
+        <span (click)="togglePosts()" class="profile-icon">👤</span> <!-- Profile icon -->
+        <span>☰</span> <!-- Menu -->
+      </div>
+    </div>
+    <div *ngIf="showPosts" class="posts-container">
+      <div class="header">
+        <h1>Recent Posts</h1>
+        <button class="edit-btn">Edit</button>
+      </div>
+      <div class="posts-section">
+        <p class="no-posts">No Available Posts</p>
+        <p class="prompt">Click Here to Publish Your First Post</p>
+        <button class="post-btn">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
