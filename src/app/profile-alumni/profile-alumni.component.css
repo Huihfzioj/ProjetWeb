@@ -43,23 +43,13 @@ body {
   opacity: 0.8;
 }
 
-.profile-info, .interests, .skills {
+.profile-info, .interests {
   margin-top: 20px;
 }
 
 .profile-info li, .interests li {
   margin: 10px 0;
   font-size: 0.95em;
-}
-
-.skills h3 {
-  font-size: 1.1em;
-  margin-bottom: 5px;
-}
-
-.skills p {
-  font-style: italic;
-  opacity: 0.7;
 }
 
 /* Main Content Styling */
@@ -159,4 +149,223 @@ body {
 
 .post-btn:hover {
   background-color: #357abd;
+}
+
+/* New Post Container Styling */
+.new-post-container {
+  margin-top: 20px;
+}
+
+.new-post-container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.new-post-container textarea {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+}
+
+.post-composer {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.post-actions {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.cancel-btn {
+  padding: 8px 15px;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa;
+}
+
+/* Job Offer Form Styling */
+.job-offer-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  height: 150px;
+  resize: none;
+}
+
+/* Post List Styling */
+.post-list {
+  margin-top: 20px;
+}
+
+.post {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  position: relative;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.post-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.post-header strong {
+  margin-right: 10px;
+}
+
+.post-date {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.post-content {
+  margin-top: 10px;
+}
+
+/* Post Actions Menu Styling */
+.post-actions-menu {
+  margin-left: auto;
+  position: relative;
+}
+
+.menu-dots {
+  cursor: pointer;
+  font-size: 1.5em;
+  padding: 5px;
+  user-select: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  padding: 5px 0;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 15px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Edit Post Container Styling */
+.edit-post-container {
+  margin-top: 20px;
+}
+
+/* Edit Profile Container Styling */
+.edit-profile-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.edit-profile-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  height: 150px;
+  resize: none;
+}
+
+.change-btn,
+.save-btn {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.change-btn:hover,
+.save-btn:hover {
+  background-color: #0056b3;
 }
