@@ -8,17 +8,16 @@
     </div>
     <ul class="profile-info">
       <li><strong>Graduation Year:</strong> 2021</li>
-      <li><strong>Job Title:</strong>  {{ jobTitle }}</li>
-      <li><strong>Company:</strong>  {{ companyName }}</li>
+      <li><strong>Job Title:</strong> {{ jobTitle }}</li>
+      <li><strong>Company:</strong> {{ companyName }}</li>
       <li><strong>Full-Time:</strong> {{ companyName }}</li>
       <li><strong>Industry:</strong> Web Development</li>
     </ul>
     <ul class="interests">
       <li *ngIf="preferences.mentor">👩‍🎓 Mentor</li>
       <li *ngIf="preferences.referrals">📚 Job/Internship Referrals</li>
-      <li *ngIf="preferences.advice" >💡 Career Advice</li>
+      <li *ngIf="preferences.advice">💡 Career Advice</li>
     </ul>
-    
   </div>
 
   <!-- Main Content -->
@@ -27,13 +26,65 @@
     <div class="top-nav">
       <input type="text" placeholder="Search" class="search-bar">
       <div class="nav-icons">
-        <span>🏠</span> <!-- Home icon -->
+        <span (click)="toggleHome()">🏠</span> <!-- Home icon -->
         <span>📄</span> <!-- Documents icon -->
         <span>✉️</span> <!-- Messages icon -->
         <span (click)="togglePosts()" class="profile-icon">👤</span> <!-- Profile icon -->
         <span>☰</span> <!-- Menu -->
       </div>
     </div>
+    <!-- Home Section -->
+    <div *ngIf="showHome" class="home-container">
+      <div class="latest-offers">
+        <h1>Latest Offers</h1>
+        <div class="offer" *ngFor="let offer of offers; let i = index">
+          <div class="offer-header">
+            <img src="/profileimg.svg" alt="Profile Picture" class="offer-profile-pic">
+            <div>
+              <strong>{{ offer.author }}</strong> {{ offer.company }}
+              <span class="offer-date">{{ offer.date }}</span>
+            </div>
+            <div class="offer-actions-menu">
+              <span class="menu-dots" (click)="toggleOfferMenu(i)">...</span>
+              <div class="dropdown-menu" *ngIf="showOfferMenu && selectedOfferIndex === i">
+                <button (click)="flagForReview(i)">Flag this post for review</button>
+              </div>
+            </div>
+          </div>
+          <h3>{{ offer.title }}</h3>
+          <p class="offer-description"><strong>Description:</strong> {{ offer.description }}</p>
+        </div>
+      </div>
+      <div class="suggestions">
+        <h1>Suggestions</h1>
+        <div class="suggestion-group">
+          <h3>Class of 2021:</h3>
+          <div class="suggestion" *ngFor="let alum of classOf2021">
+            <img src="/profileimg.svg" alt="Profile Picture" class="suggestion-pic">
+            <span>{{ alum.name }}</span>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="suggestion-group">
+          <h3>Students in your field:</h3>
+          <div class="suggestion" *ngFor="let student of studentsInField">
+            <img src="/profileimg.svg" alt="Profile Picture" class="suggestion-pic">
+            <span>{{ student.name }}</span>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Flagged Post Popup -->
+    <div *ngIf="showFlaggedPopup" class="popup-overlay">
+      <div class="popup">
+        <button class="close-btn" (click)="closeFlaggedPopup()">X</button>
+        <h2>Flagged Post</h2>
+        <p>Thank you for reporting this post. Our team will review it shortly and take appropriate action if necessary.</p>
+        <button class="ok-btn" (click)="closeFlaggedPopup()">OK</button>
+      </div>
+    </div>
+    <!-- Posts Section -->
     <div *ngIf="showPosts" class="posts-container">
       <div *ngIf="!showEditProfile && !showNewPost && !editingPostIndex" class="posts-section">
         <div class="header">
@@ -42,17 +93,17 @@
         </div>
         <div class="post-list" *ngIf="posts.length > 0">
           <div class="post" *ngFor="let post of posts; let i = index">
-            <div class="post-header" (click)="$event.stopPropagation()">
-              <img src="/profileimg.svg" alt="Profile Picture" class="post-profile-pic">
+            <div class="post-header">
+              <img src="/profileimg.svg" alt="Profile Picture" class="profile-pic">
               <div>
                 <strong>{{ post.author }}</strong> {{ post.company }}
                 <span class="post-date">{{ post.date }}</span>
               </div>
-              <div class="post-actions-menu" (click)="$event.stopPropagation()">
+              <div class="post-actions-menu">
                 <span class="menu-dots" (click)="togglePostMenu(i)">...</span>
                 <div class="dropdown-menu" *ngIf="showPostMenu && selectedPostIndex === i">
-                  <button (click)="editPost(i); $event.stopPropagation()">Edit Post</button>
-                  <button (click)="deletePost(i); $event.stopPropagation()">Delete Post</button>
+                  <button (click)="editPost(i)">Edit Post</button>
+                  <button (click)="deletePost(i)">Delete Post</button>
                 </div>
               </div>
             </div>
@@ -68,7 +119,6 @@
           <h1>Edit Profile</h1>
         </div>
         <div class="edit-profile-form">
-          
           <div class="form-group">
             <label>Change Job Title</label>
             <input type="text" [(ngModel)]="jobTitle" placeholder="Enter new job title">
@@ -142,8 +192,7 @@
           <button (click)="submitPost()" class="post-btn">Post</button>
         </div>
       </div>
-
-    <div *ngIf="editingPostIndex !== null" class="edit-post-container">
+      <div *ngIf="editingPostIndex !== null" class="edit-post-container">
         <div class="header">
           <h1>Edit Post</h1>
           <button class="edit-btn">Edit</button>

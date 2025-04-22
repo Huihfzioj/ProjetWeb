@@ -11,9 +11,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProfileAlumniComponent {
 
+  showHome: boolean = false;
   showPosts: boolean = false;
   showNewPost: boolean = false;
   showEditProfile: boolean = false;
+  showFlaggedPopup: boolean = false;
   isJobOffer: boolean = false;
   jobType: string = 'internship';
   duration: string = '6 months';
@@ -22,7 +24,6 @@ export class ProfileAlumniComponent {
   salary: string = '';
   description: string = '';
   content: string = '';
-  newSkill: string = '';
   jobTitle: string = 'Developer';
   companyName: string = 'XY';
   preferences: { mentor: boolean, referrals: boolean, advice: boolean } = { mentor: false, referrals: false, advice: false };
@@ -30,20 +31,65 @@ export class ProfileAlumniComponent {
   showPostMenu: boolean = false;
   selectedPostIndex: number | null = null;
   editingPostIndex: number | null = null;
+  showOfferMenu: boolean = false;
+  selectedOfferIndex: number | null = null;
   
   constructor(private router: Router) {
     this.router.navigate(['/profile-alumni']);
   }
 
+  offers = [
+    {
+      author: 'Alexa Rawles',
+      company: '@XY',
+      date: 'Feb 18, 2025',
+      title: 'Internship Offer: DevOps Engineer - 6 months - Vinci Construction',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum erat maximus, stet pretium ipsum. Vivamus in molestie ligula. Aenean sit amet urna est. Vestibulum efficitur porttitor justo, sit amet aliquam felis vulputate sagittis. Nunc turpis orci, consectetur ut mi ac, pulvinar tristique nunc. Integer consequat turpis non tellus luctus, in ornare ipsum venenatis. Morbi enim neque, faucibus in eros at, aliquet pharetra diam. Aliquam nec justo quis tellus ornare maximus. Integer vel nunc odio. Donec vel neque id mi vestibulum lacinia ut rhoncus est.'
+    },
+    {
+      author: 'Alexa Rawles',
+      company: '@XY',
+      date: 'Feb 18, 2025',
+      title: 'Internship Offer: DevOps Engineer - 6 months - Vinci Construction',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum erat maximus, stet pretium ipsum. Vivamus in molestie ligula. Aenean sit amet urna est. Vestibulum efficitur porttitor justo, sit amet aliquam felis vulputate sagittis. Nunc turpis orci, consectetur ut mi ac, pulvinar tristique nunc. Integer consequat turpis non tellus luctus, in ornare ipsum venenatis. Morbi enim neque, faucibus in eros at, aliquet pharetra diam. Aliquam nec justo quis tellus ornare maximus. Integer vel nunc odio. Donec vel neque id mi vestibulum lacinia ut rhoncus est.'
+    }
+  ];
+
   
-  togglePosts(): void {
-    this.showPosts = !this.showPosts;
-    if (!this.showPosts) {
+  classOf2021 = [
+    { name: 'Nadia Lauren' },
+    { name: 'Foulena' }
+  ];
+
+  studentsInField = [
+    { name: 'Hedi Jlassi' }
+  ];
+
+
+
+  toggleHome(): void {
+    this.showHome = !this.showHome;
+    if (this.showHome) {
+      this.showPosts = false;
       this.showNewPost = false;
       this.showEditProfile = false;
       this.editingPostIndex = null;
       this.showPostMenu = false;
       this.selectedPostIndex = null;
+    }
+  }
+  togglePosts(): void {
+    this.showPosts = !this.showPosts;
+    if (this.showPosts) {
+      this.showHome = false;
+      this.showNewPost = false;
+      this.showEditProfile = false;
+      this.editingPostIndex = null;
+      this.showPostMenu = false;
+      this.selectedPostIndex = null;
+      this.showOfferMenu = false;
+      this.selectedOfferIndex = null;
+      this.showFlaggedPopup = false;
     }
   }
   toggleEditProfile(): void {
@@ -66,6 +112,25 @@ export class ProfileAlumniComponent {
       this.description = '';
       this.content = '';
     }
+  }
+  toggleOfferMenu(index: number): void {
+    if (this.selectedOfferIndex === index && this.showOfferMenu) {
+      this.showOfferMenu = false;
+      this.selectedOfferIndex = null;
+    } else {
+      this.showOfferMenu = true;
+      this.selectedOfferIndex = index;
+    }
+  }
+
+
+  flagForReview(index: number): void {
+    console.log(`Offer at index ${index} flagged for review`);
+    this.showOfferMenu = false;
+    this.selectedOfferIndex = null;
+  }
+  closeFlaggedPopup(): void {
+    this.showFlaggedPopup = false;
   }
 
   changeJobTitle(): void {
