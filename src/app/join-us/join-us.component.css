@@ -1,5 +1,6 @@
 
-* {
+ *{
+
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -65,7 +66,6 @@
     background-color: #D3D3D3;
     color: #333;
 
-
   }
   
   .signup-form, .login-form {
@@ -109,7 +109,9 @@
 
   /* Student Form */
   .student-form {
+
     width: 100%;}
+
 
   .form-group {
     margin-bottom: 20px;
@@ -214,12 +216,14 @@
   /* Log In Form (Simpler Version) */
   .form-box {
     margin-top: 20px;
+  }
   .login-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }}
+  }
+
   
   .form {
     display: flex;
@@ -270,7 +274,7 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition:  0.3s;
   }
   
   .form button:hover {
@@ -296,6 +300,9 @@
   
   .form-section a:hover {
     text-decoration: underline;
+
+  }
+
   .remember-me input {
     margin-right: 5px;
   }
@@ -321,4 +328,5 @@
   
   .submit-button:hover {
     background-color: #4A90E2;
-    color: white;}}
+
+    color: white;}

@@ -1,7 +1,11 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for [(ngModel)]
 import { RouterLink } from '@angular/router'; // Import RouterLink for routerLink directive
 import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf, *ngFor, etc.
+
+
+
 
 @Component({
   selector: 'app-join-us',
@@ -14,8 +18,6 @@ export class JoinUsComponent implements OnInit {
   isSignUpTab: boolean = true; // Initialize to show Sign Up tab by default
   userType: string = 'student'; // Default to student form
   showPassword: boolean = false;
-
-  // Initialize form data objects
   student = {
     firstName: '',
     lastName: '',

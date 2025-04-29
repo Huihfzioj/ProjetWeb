@@ -1,0 +1,210 @@
+<div class="container">
+  <!-- Sidebar (Profile Section) -->
+  <div class="sidebar">
+    <div class="profile-header">
+      <img src="/profileimg.svg" alt="Profile Picture" class="profile-pic">
+      <h2>Alexa Rawles</h2>
+      <p class="role">Alumni</p>
+    </div>
+    <ul class="profile-info">
+      <li><strong>Graduation Year:</strong> 2021</li>
+      <li><strong>Job Title:</strong> {{ jobTitle }}</li>
+      <li><strong>Company:</strong> {{ companyName }}</li>
+      <li><strong>Full-Time:</strong> {{ companyName }}</li>
+      <li><strong>Industry:</strong> Web Development</li>
+    </ul>
+    <ul class="interests">
+      <li *ngIf="preferences.mentor">👩‍🎓 Mentor</li>
+      <li *ngIf="preferences.referrals">📚 Job/Internship Referrals</li>
+      <li *ngIf="preferences.advice">💡 Career Advice</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <div class="top-nav">
+      <input type="text" placeholder="Search" class="search-bar">
+      <div class="nav-icons">
+        <span (click)="toggleHome()">🏠</span> <!-- Home icon -->
+        <span>📄</span> <!-- Documents icon -->
+        <span>✉️</span> <!-- Messages icon -->
+        <span (click)="togglePosts()" class="profile-icon">👤</span> <!-- Profile icon -->
+        <span>☰</span> <!-- Menu -->
+      </div>
+    </div>
+    <!-- Home Section -->
+    <div *ngIf="showHome" class="home-container">
+      <div class="latest-offers">
+        <h1>Latest Offers</h1>
+        <div class="offer" *ngFor="let offer of offers; let i = index">
+          <div class="offer-header">
+            <img src="/profileimg.svg" alt="Profile Picture" class="offer-profile-pic">
+            <div>
+              <strong>{{ offer.author }}</strong> {{ offer.company }}
+              <span class="offer-date">{{ offer.date }}</span>
+            </div>
+            <div class="offer-actions-menu">
+              <span class="menu-dots" (click)="toggleOfferMenu(i)">...</span>
+              <div class="dropdown-menu" *ngIf="showOfferMenu && selectedOfferIndex === i">
+                <button (click)="flagForReview(i)">Flag this post for review</button>
+              </div>
+            </div>
+          </div>
+          <h3>{{ offer.title }}</h3>
+          <p class="offer-description"><strong>Description:</strong> {{ offer.description }}</p>
+        </div>
+      </div>
+      <div class="suggestions">
+        <h1>Suggestions</h1>
+        <div class="suggestion-group">
+          <h3>Class of 2021:</h3>
+          <div class="suggestion" *ngFor="let alum of classOf2021">
+            <img src="/profileimg.svg" alt="Profile Picture" class="suggestion-pic">
+            <span>{{ alum.name }}</span>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="suggestion-group">
+          <h3>Students in your field:</h3>
+          <div class="suggestion" *ngFor="let student of studentsInField">
+            <img src="/profileimg.svg" alt="Profile Picture" class="suggestion-pic">
+            <span>{{ student.name }}</span>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Flagged Post Popup -->
+    <div *ngIf="showFlaggedPopup" class="popup-overlay">
+      <div class="popup">
+        <button class="close-btn" (click)="closeFlaggedPopup()">X</button>
+        <h2>Flagged Post</h2>
+        <p>Thank you for reporting this post. Our team will review it shortly and take appropriate action if necessary.</p>
+        <button class="ok-btn" (click)="closeFlaggedPopup()">OK</button>
+      </div>
+    </div>
+    <!-- Posts Section -->
+    <div *ngIf="showPosts" class="posts-container">
+      <div *ngIf="!showEditProfile && !showNewPost && !editingPostIndex" class="posts-section">
+        <div class="header">
+          <h1>Recent Posts</h1>
+          <button (click)="toggleEditProfile()" class="edit-btn">Edit</button>
+        </div>
+        <div class="post-list" *ngIf="posts.length > 0">
+          <div class="post" *ngFor="let post of posts; let i = index">
+            <div class="post-header">
+              <img src="/profileimg.svg" alt="Profile Picture" class="profile-pic">
+              <div>
+                <strong>{{ post.author }}</strong> {{ post.company }}
+                <span class="post-date">{{ post.date }}</span>
+              </div>
+              <div class="post-actions-menu">
+                <span class="menu-dots" (click)="togglePostMenu(i)">...</span>
+                <div class="dropdown-menu" *ngIf="showPostMenu && selectedPostIndex === i">
+                  <button (click)="editPost(i)">Edit Post</button>
+                  <button (click)="deletePost(i)">Delete Post</button>
+                </div>
+              </div>
+            </div>
+            <p class="post-content">{{ post.content }}</p>
+          </div>
+        </div>
+        <p class="no-posts" *ngIf="posts.length === 0">No Available Posts</p>
+        <p class="prompt" *ngIf="posts.length === 0">Click Here to Publish Your First Post</p>
+        <button (click)="showNewPost = true" class="post-btn">Post</button>
+      </div>
+      <div *ngIf="showEditProfile" class="edit-profile-container">
+        <div class="header">
+          <h1>Edit Profile</h1>
+        </div>
+        <div class="edit-profile-form">
+          <div class="form-group">
+            <label>Change Job Title</label>
+            <input type="text" [(ngModel)]="jobTitle" placeholder="Enter new job title">
+            <button class="change-btn" (click)="changeJobTitle()">Change</button>
+          </div>
+          <div class="form-group">
+            <label>Change Company</label>
+            <input type="text" [(ngModel)]="companyName" placeholder="Enter new company">
+            <button class="change-btn" (click)="changeCompany()">Change</button>
+          </div>
+          <div class="form-group">
+            <label>Change Preferences</label>
+            <div>
+              <label><input type="checkbox" [(ngModel)]="preferences.mentor"> I am open to mentoring students.</label>
+            </div>
+            <div>
+              <label><input type="checkbox" [(ngModel)]="preferences.referrals"> I am willing to refer students for job or internship opportunities.</label>
+            </div>
+            <div>
+              <label><input type="checkbox" [(ngModel)]="preferences.advice"> I am open to providing career advice to students.</label>
+            </div>
+            <button class="save-btn" (click)="savePreferences()">Save Preferences</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="showNewPost" class="new-post-container">
+        <div class="header">
+          <h1>New Post</h1>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <label>
+          <input type="checkbox" [(ngModel)]="isJobOffer" (change)="toggleJobOffer()"> Job or Internship Offer
+        </label>
+        <div *ngIf="isJobOffer" class="job-offer-form">
+          <div class="form-group">
+            <label>Type</label>
+            <select [(ngModel)]="jobType">
+              <option value="internship">Internship</option>
+              <option value="job">Job</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Duration</label>
+            <select [(ngModel)]="duration">
+              <option value="6 months">6 months</option>
+              <option value="12 months">12 months</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" [(ngModel)]="company">
+          </div>
+          <div class="form-group">
+            <label>Position</label>
+            <input type="text" [(ngModel)]="position">
+          </div>
+          <div class="form-group">
+            <label>Proposed Salary (Blank if N/A)</label>
+            <input type="text" [(ngModel)]="salary">
+          </div>
+          <div class="form-group">
+            <label>Write out the offer's description here</label>
+            <textarea [(ngModel)]="description" placeholder="Write out the offer's description here"></textarea>
+          </div>
+        </div>
+        <div class="post-composer" *ngIf="!isJobOffer">
+          <textarea [(ngModel)]="content" placeholder="Compose new post"></textarea>
+        </div>
+        <div class="post-actions">
+          <button (click)="showNewPost = false" class="cancel-btn">Cancel</button>
+          <button (click)="submitPost()" class="post-btn">Post</button>
+        </div>
+      </div>
+      <div *ngIf="editingPostIndex !== null" class="edit-post-container">
+        <div class="header">
+          <h1>Edit Post</h1>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div class="post-composer">
+          <textarea [(ngModel)]="posts[editingPostIndex].content" placeholder="Edit your post"></textarea>
+          <div class="post-actions">
+            <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+            <button (click)="saveEdit()" class="post-btn">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
