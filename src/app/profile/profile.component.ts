@@ -3,19 +3,34 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilterConversationsWithUnreadPipe } from './filter-conversations-with-unread.pipe';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, FilterConversationsWithUnreadPipe],
+  imports: [CommonModule, FormsModule, FilterConversationsWithUnreadPipe,HttpClientModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit{ 
   user: any = {};
   userType: string = '';
+
+  constructor(private router: Router, private http: HttpClient) {}
+
+  ngOnInit(): void {
+    console.log('Initialisation du composant');
+    this.logDashboardData();
+    const navigation = this.router.getCurrentNavigation();
+    if (typeof window !== 'undefined') {
+      this.user = navigation?.extras.state?.['user'] ?? JSON.parse(localStorage.getItem('user') || '{}');
+      this.userType = navigation?.extras.state?.['userType'] ?? (localStorage.getItem('userType') || '');
+    }
+    console.log('user'+this.user);
+  }
+
   showAddForm: boolean = false;
   showEditForm: boolean = false;
   showMenu: boolean = false;
@@ -123,13 +138,7 @@ topEmployers = [
   // Selected conversation for displaying messages
   selectedConversation: any = null;
 
-  constructor(private router: Router) {
-    const navigation = this.router.getCurrentNavigation();
-    this.user = navigation?.extras.state?.['user'];
-    this.userType = navigation?.extras.state?.['userType'];
-    console.log('Received user:', this.user);
-  }
-  
+ 
 
   // Toggle document form visibility
   toggleAddForm() {
@@ -193,29 +202,85 @@ topEmployers = [
 
   // Handle document form submission
   postDocument() {
-    if (this.description && this.selectedFile instanceof File) {
-      const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const fileUrl = URL.createObjectURL(this.selectedFile);
-
-      this.documents.push({
-        description: this.description,
-        fileName: this.selectedFile.name,
-        fileType: this.selectedFile.type.includes('pdf') ? 'PDF' : 'FILE',
-        date: formattedDate,
-        fileUrl: fileUrl
-      });
-
-      this.description = '';
-      this.selectedFile = null;
-      this.showAddForm = false;
+    if (this.description && this.selectedFile instanceof File && this.user?.id) {
+      const formData = new FormData();
+      formData.append('document', this.selectedFile);
+      formData.append('description', this.description);
+      formData.append('name', this.selectedFile.name);
+     this.http.post(`/api/student/${this.user.id}/upload-document`, formData, { responseType: 'text' }).subscribe({
+      next: () => {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        if(this.selectedFile!=null){
+          const fileUrl = URL.createObjectURL(this.selectedFile);
+          this.documents.push({
+            description: this.description,
+            fileName: this.selectedFile.name,
+            fileType: this.selectedFile.type.includes('pdf') ? 'PDF' : 'FILE',
+            date: formattedDate,
+            fileUrl: fileUrl
+          });
+          this.description = '';
+          this.selectedFile = null;
+          this.showAddForm = false;
+        }
+  },
+  error: (error) => {
+    console.error('Document upload failed:', error);
+    alert('Failed to upload document');
+  }
+});
+    } else {
+      alert('Please fill all required fields');
     }
   }
-
+  loadDocuments() {
+    if (this.user?.id) {
+      this.http.get(`/api/student/${this.user.id}/documents`).subscribe({
+        next: (docs: any) => {
+          this.documents = docs;
+        },
+        error: (err) => {
+          console.error('Error loading documents:', err);
+        }
+      });
+    }
+  }
+  
+  updateProfileField(field: 'skills' | 'specialty' | 'searchType' | 'graduationYear') {
+    if (!this.user?.id) return;
+  
+    const formData = new FormData();
+  
+    if (field === 'skills') {
+      formData.append('skills', this.skills || '');
+    }
+    if (field === 'specialty') {
+      formData.append('speciality', this.specialty || '');
+    }
+    if (field === 'searchType') {
+      formData.append('searchType', this.searchingFor || '');
+    }
+    if (field === 'graduationYear') {
+      formData.append('predictedGradYear', this.graduationYear?.toString() || '');
+    }
+    this.http.put(`/api/student/${this.user.id}/complete-profile`, formData).subscribe({
+      next: (updated: any) => {
+        console.log(`${field} updated`, updated);
+        alert(`${field} updated successfully`);
+      },
+      error: (err) => {
+        console.error(`Error updating ${field}`, err);
+        alert(`Failed to update ${field}`);
+      }
+    });
+  }
+  
   // Handle adding skills
   addSkill() {
     if (this.skills && this.skills !== 'Not specified') {
       this.skills = this.skills;
+      this.updateProfileField('skills');
     }
   }
 
@@ -223,6 +288,7 @@ topEmployers = [
   addSpecialty() {
     if (this.specialty && this.specialty !== 'NA') {
       this.specialty = this.specialty;
+      this.updateProfileField('specialty');
     }
   }
 
@@ -230,6 +296,7 @@ topEmployers = [
   changeSearchingFor() {
     if (this.searchingFor && this.searchingFor !== 'NA') {
       this.searchingFor = this.searchingFor;
+      this.updateProfileField('searchType');
     }
   }
 
@@ -237,6 +304,7 @@ topEmployers = [
   changeGraduationYear() {
     if (this.graduationYear && this.graduationYear !== '2027') {
       this.graduationYear = this.graduationYear;
+      this.updateProfileField('graduationYear');
     }
   }
 
@@ -256,14 +324,6 @@ topEmployers = [
     console.log('Deleting account...');
     this.showMenu = false;
   }
- 
-
-
-  ngOnInit() {
-    console.log('Initialisation du composant');
-    this.logDashboardData();
-  }
-
   private logDashboardData() {
     console.log('Données du dashboard:', {
       showDashboard: this.showDashboard,
@@ -272,6 +332,4 @@ topEmployers = [
       industries: this.industries,
       suggestedAlumni: this.suggestedAlumni
     });
-  
-    
 }}

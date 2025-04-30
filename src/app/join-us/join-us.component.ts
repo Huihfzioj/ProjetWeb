@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf
 @Component({
   selector: 'app-join-us',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './join-us.component.html',
   styleUrls: ['./join-us.component.css']
 })

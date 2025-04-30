@@ -37,10 +37,14 @@ export class LoginComponent {
           return;
         }
   
-        // Step 2: Send login request
         this.http.post(endpoint, loginData).subscribe({
           next: (response: any) => {
             console.log('Login successful:', response);
+            
+            // Save to localStorage
+            localStorage.setItem('user', JSON.stringify(response));
+            localStorage.setItem('userType', userType);
+        
             this.router.navigate([route]);
           },
           error: (error) => {
