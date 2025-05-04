@@ -564,3 +564,146 @@ body {
 .save-btn:hover {
   background-color: #0056b3;
 }
+.message-input-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.message-input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-right: 10px;
+}
+
+.send-button {
+  padding: 8px 16px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.messages-section {
+  display: flex;
+  height: calc(100vh - 200px);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.conversations-list {
+  width: 300px;
+  border-right: 1px solid #e0e0e0;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+.conversation-item {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.conversation-item:hover {
+  background-color: #f0f0f0;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.message-content.sent {
+  background-color: #4A90E2;
+  color: white;
+  margin-left: auto;
+}
+
+.message-content.received {
+  background-color: #e0e0e0;
+  margin-right: auto;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #999;
+  display: block;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.date-divider {
+  text-align: center;
+  margin: 15px 0;
+  color: #999;
+  font-size: 12px;
+  position: relative;
+}
+
+.date-divider:before,
+.date-divider:after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+  margin: auto;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.status-dot.online {
+  background-color: #4CAF50;
+}
+
+.request-button {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.unread-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #4A90E2;
+  border-radius: 50%;
+}

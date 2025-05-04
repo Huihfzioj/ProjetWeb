@@ -4,18 +4,18 @@
     <div class="profile-header">
       <img src="/profileimg.svg" alt="Profile Avatar" class="profile-avatar">
       <h2 class="profile-name">
-        {{ userType === 'student' ? (user.firstName + ' ' + user.lastName) : user.fullName }}
+        {{ fullName }}
       </h2>
       <p class="user-type">{{ userType | titlecase }}</p>
     </div>
     <ul class="profile-details">
-      <li *ngIf="userType === 'student'"><strong>Department:</strong> Informatics</li>
+      <li *ngIf="userType === 'student'"><strong>Department:</strong> {{user.specialty}}</li>
       <li *ngIf="userType === 'alumni'"><strong>Department:</strong> {{ user.department }}</li>
       <li><strong>Specialty:</strong> {{ specialty }}</li>
-      <li *ngIf="userType === 'student'"><strong>Graduation Year:</strong> {{ graduationYear }}</li>
+      <li *ngIf="userType === 'student'"><strong>Graduation Year:</strong> {{ user.predictedGradYear }}</li>
       <li *ngIf="userType === 'alumni'"><strong>Graduation Year:</strong> {{ user.graduationYear }}</li>
-      <li><strong>Searching For:</strong> {{ searchingFor }}</li>
-      <li><strong>Skills:</strong> {{ skills }}</li>
+      <li><strong>Searching For:</strong> {{ user.searchType }}</li>
+      <li><strong>Skills:</strong> {{ user.skill }}</li>
     </ul>
   </div>
 
@@ -83,25 +83,24 @@
 
       
         <!-- Show Latest Offers -->
-<div class="latest-offers-container" *ngIf="showLatestOffers">
-  <div class="offers-section">
-    <h3>Latest Offers</h3>
-    <div class="offer-item" *ngFor="let offer of latestOffers | slice:0:2">
-      <div class="offer-header">
-        <div class="user-info">
-          <img src="/profileimg.svg" alt="Profile Avatar" class="offer-avatar">
-          <div>
-            <p class="offer-user">{{ offer.user }}</p>
-            <p class="offer-role">{{ offer.role }}</p>
+        <div class="latest-offers-container" *ngIf="showLatestOffers">
+          <div class="offers-section">
+            <h3>Latest Offers</h3>
+            <div class="offer-item" *ngFor="let offer of latestOffers | slice:0:2; let i = index">
+              <div class="offer-header">
+                <div class="user-info">
+                  <img src="/profileimg.svg" alt="Profile Avatar" class="offer-avatar">
+                  <div>
+                    <strong>{{ offer.author }}</strong> <br> 
+                    {{ "@" + offer.creatorCompany }}
+                    <span class="offer-date">{{ offer.createdAt | date: 'short' }}</span>
+                  </div>
+                </div>
+              </div>
+              <h4 class="offer-title">{{ offer.offerType }} OFFER: {{ offer.position }} — {{ offer.duration }} — {{ offer.company }}</h4>
+              <p class="offer-description">{{ offer.description}}</p>
+            </div>
           </div>
-        </div>
-        <p class="offer-date">{{ offer.date }} <span>⋯</span></p>
-      </div>
-      <h4 class="offer-title">{{ offer.description.split('\n\n')[0] }}</h4>
-      <p class="offer-description">{{ offer.description.split('\n\n')[1] }}</p>
-    </div>
-  </div>
-
   <div class="suggestions-section">
     <h3>Suggestions</h3>
     <p class="suggestions-subtitle">Alumni in your field:</p>
@@ -116,10 +115,7 @@
     </div>
   </div>
 </div>
-
-  
-
-      <!-- Show Messages -->
+     <!-- Show Messages -->
 <div class="messages-section" *ngIf="showMessages">
   <div class="conversations-list">
     <h3>Messaging <span class="unread-count">{{ (conversations | filterConversationsWithUnread).length }}</span></h3>
@@ -129,12 +125,18 @@
       <div class="user-info">
         <img src="/profileimg.svg" alt="Profile Avatar" class="conversation-avatar">
         <div>
-          <p class="conversation-user">{{ convo.user }} <span class="user-role">{{ convo.role }}</span></p>
-          <p class="last-message">{{ convo.lastMessage }}</p>
+          <p class="conversation-user">
+            {{ convo.otherUser.name }}
+            <span class="user-role">{{ getSimpleRole(convo.role) }}</span>
+          </p>
+          <p class="last-message">
+            {{ convo.lastMessageContent ? (convo.lastMessageContent | slice:0:30) : 'No messages yet' }}
+            {{ convo.lastMessageContent && convo.lastMessageContent.length > 30 ? '...' : '' }}
+          </p>
         </div>
       </div>
       <div class="conversation-meta">
-        <p class="conversation-time">{{ convo.timeAgo }}</p>
+        <p class="conversation-time">{{ convo.lastMessageDate | timeAgo }}</p>
         <span class="unread-dot" *ngIf="convo.unreadCount"></span>
       </div>
     </div>
@@ -145,7 +147,7 @@
       <div class="user-info">
         <img src="/profileimg.svg" alt="Profile Avatar" class="chat-avatar">
         <div>
-          <p class="chat-user">{{ selectedConversation.user }}</p>
+          <p class="chat-user">{{ selectedConversation.otherUser.name }}</p>
           <p class="chat-status"><span class="status-dot online"></span> Online</p>
         </div>
       </div>
@@ -156,11 +158,21 @@
       <div class="date-divider">Today</div>
       
       <div class="message" *ngFor="let msg of selectedConversation.messages">
-        <div class="message-content" [ngClass]="{'sent': msg.sender === 'You', 'received': msg.sender !== 'You'}">
-          <p>{{ msg.text }}</p>
-          <span class="message-time">{{ msg.time }}</span>
+        <div class="message-content" [ngClass]="{'sent': msg.isCurrentUser, 'received': !msg.isCurrentUser}">
+          <p>{{ msg.content }}</p>
+          <span class="message-time">{{ msg.sentDate | timeAgo }}</span>
         </div>
       </div>
+    </div>
+    <div class="message-input-bar">
+      <input
+        type="text"
+        [(ngModel)]="newMessageContent"
+        placeholder="Type your message..."
+        class="message-input"
+        (keydown.enter)="sendMessage()"
+      />
+      <button class="send-button" (click)="sendMessage()">Send</button>
     </div>
   </div>
 </div>
@@ -189,33 +201,31 @@
             <p>Click Here To Add Your Resume And Other Relevant Documents</p>
             <button class="add-button" (click)="toggleAddForm()">Add</button>
           </div>
-          <div *ngIf="documents.length > 0">
-            <div class="document-item" *ngFor="let doc of documents">
-              <div class="document-header">
-                <div class="user-info">
-                  <img src="/profileimg.svg" alt="Profile Avatar" class="document-avatar">
-                  <div>
-                    <p class="document-user">{{ userType === 'student' ? (user.firstName + ' ' + user.lastName) : user.fullName }}</p>
-                    <p class="document-role">{{ userType | titlecase }}</p>
-                  </div>
+          <div *ngFor="let doc of documents" class="document-card">
+            <div class="document-header"> 
+              <div class="user-info">
+                <img src="/profileimg.svg" alt="Profile Avatar" class="document-avatar">
+                <div>
+                  <p class="document-user">
+                    {{ userType === 'student' ? (user.firstName + ' ' + user.lastName) : user.fullName }}
+                  </p>
+                  <p class="document-role">{{ userType | titlecase }}</p>
                 </div>
-                <p class="document-date">{{ doc.date }} <span>⋯</span></p>
               </div>
-              <p class="document-description">{{ doc.description }}</p>
-              <div class="document-file">
-                <span class="file-type">{{ doc.fileType }}</span>
-                <a [href]="doc.fileUrl" [download]="doc.fileName" class="file-name">{{ doc.fileName }}</a>
-              </div>
+              <p class="document-date">{{ doc.date }} <span>⋯</span></p>
+            </div>
+          
+            <p class="document-description">{{ doc.description }}</p>
+          
+            <div class="document-file">
+              <span class="file-type">{{ doc.fileType }}</span>
+              <a [href]="doc.fileUrl" [download]="doc.fileName" class="file-name">{{ doc.fileName }}</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-
-
 <div class="dashboard-section" *ngIf="showDashboard">
   <h2>Dashboard</h2>
   
@@ -231,27 +241,14 @@
         <table>
           <thead>
             <tr>
-              <th>Logo</th>
               <th>Company Name</th>
-              <th>Sector</th>
               <th>Number of Hires</th>
-              <th>Number of Interns</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><img src="/google-logo.svg" alt="Google" class="company-logo"></td>
-              <td>Google</td>
-              <td>Technology</td>
-              <td>80</td>
-              <td>10</td>
-            </tr>
-            <tr>
-              <td><img src="/microsoft-logo.svg" alt="Microsoft" class="company-logo"></td>
-              <td>Microsoft</td>
-              <td>Technology</td>
-              <td>40</td>
-              <td>25</td>
+            <tr *ngFor="let employer of topEmployers">
+              <td>{{ employer.companyName }}</td>
+              <td>{{ employer.hires }}</td>
             </tr>
           </tbody>
         </table>
@@ -262,24 +259,23 @@
       <h3>Top Sought-after Skills</h3>
       <div class="skills-list">
         <div class="skill-item" *ngFor="let skill of topSkills">
-          <span class="skill-name">{{skill.name}}</span>
+          <span class="skill-name">{{ skill.name }}</span>
           <div class="skill-bar">
             <div class="skill-progress" [style.width.%]="skill.percentage"></div>
           </div>
-          <span class="skill-percentage">{{skill.percentage}}%</span>
+          <span class="skill-percentage">{{ skill.percentage }}%</span>
         </div>
       </div>
     </div>
 
     <!-- Section Employment -->
     <div class="dashboard-card">
-      <h3>Employment By Industry</h3>
+      <h3>Employment By Speciality</h3>
       <div class="industry-stats">
-        <div class="industry-item" *ngFor="let industry of industries">
-          <div class="industry-percentage">{{industry.percentage}}%</div>
-          <div class="industry-name">{{industry.name}}</div>
+        <div class="industry-item" *ngFor="let specialty of industries">
+          <div class="industry-percentage">{{ specialty.percentage }}%</div>
+          <div class="industry-name">{{ specialty.name }}</div>
         </div>
       </div>
     </div>
-  </div>
 </div>

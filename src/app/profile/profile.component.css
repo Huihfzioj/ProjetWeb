@@ -81,7 +81,31 @@
   font-size: 14px;
   outline: none;
 }
+.message-input-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
 
+.message-input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-right: 10px;
+}
+
+.send-button {
+  padding: 8px 16px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
 .search-bar:focus {
   border-color: #4A90E2;
 }
@@ -90,6 +114,7 @@
   display: flex;
   gap: 20px;
 }
+
 
 .nav-icons span {
   font-size: 24px;
@@ -644,6 +669,10 @@
   background: white;
   border-radius: 10px;
   margin-top: 20px;
+  width: 80%;
+  margin: 0 auto;
+  border: 2px solid red; /* Pour visualiser la zone */
+  padding: 20px;
 }
 
 .dashboard-grid {
@@ -740,7 +769,11 @@ th, td {
   border-radius: 50%;
   padding: 5px;
 }
-.dashboard-section {
-  border: 2px solid red; /* Pour visualiser la zone */
-  padding: 20px;
+.dashboard-section[style*="display: block"],
+.documents-section[style*="display: block"],
+.messages-section[style*="display: block"],
+.latest-offers-container[style*="display: block"] {
+  display: block !important;
+  height: 100%;
+  overflow-y: auto;
 }

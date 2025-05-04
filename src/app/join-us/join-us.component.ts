@@ -1,8 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for [(ngModel)]
-import { RouterLink } from '@angular/router'; // Import RouterLink for routerLink directive
+import { Router, RouterLink } from '@angular/router'; // Import RouterLink for routerLink directive
 import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf, *ngFor, etc.
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../auth.service';
 
 
 
@@ -39,7 +41,7 @@ export class JoinUsComponent implements OnInit {
     password: ''
   };
 
-  constructor() {}
+  constructor(private http: HttpClient, private router: Router,private authService: AuthService) {}
 
   ngOnInit(): void {}
 
@@ -66,8 +68,30 @@ export class JoinUsComponent implements OnInit {
   onSubmit(): void {
     if (this.userType === 'student') {
       console.log('Student Sign Up:', this.student);
+      this.http.post('/api/student/signup', this.student).subscribe({
+        next: (savedUser: any) => {
+          this.authService.setUser(savedUser);
+          this.authService.setUserType('student');
+          this.router.navigate(['/profile']);
+        },
+        error: (error) => {
+          console.error('Student registration failed:', error);
+          alert('Failed to register student.');
+        }
+      });
     } else {
       console.log('Alumni Sign Up:', this.alumni);
+      this.http.post('/api/alumni/signup', this.alumni).subscribe({
+        next: (savedUser: any) => {
+          this.authService.setUser(savedUser);
+          this.authService.setUserType('alumni');
+          this.router.navigate(['/profile-alumni']);
+        },
+        error: (error) => {
+          console.error('Alumni registration failed:', error);
+          alert('Failed to register alumni.');
+        }
+      });
     }
   }
 

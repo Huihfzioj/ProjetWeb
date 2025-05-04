@@ -28,7 +28,7 @@
       <div class="nav-icons">
         <span (click)="toggleHome()">🏠</span> <!-- Home icon -->
         <span>📄</span> <!-- Documents icon -->
-        <span>✉️</span> <!-- Messages icon -->
+        <span (click)="toggleMessages()" >✉️</span> <!-- Messages icon -->
         <span (click)="togglePosts()" class="profile-icon">👤</span> <!-- Profile icon -->
         <span>☰</span> <!-- Menu -->
       </div>
@@ -36,13 +36,13 @@
     <!-- Home Section -->
     <div *ngIf="showHome" class="home-container">
       <div class="latest-offers">
-        <h1>Latest Offers</h1>
+        <h1>Latest Offers And Posts</h1>
         <div class="offer" *ngFor="let offer of offers; let i = index">
           <div class="offer-header">
             <img src="/profileimg.svg" alt="Profile Picture" class="offer-profile-pic">
             <div>
-              <strong>{{ offer.author }}</strong> {{ offer.company }}
-              <span class="offer-date">{{ offer.date }}</span>
+              <strong>{{ offer.author }}</strong> <br> {{ "@" + offer.creatorCompany }}
+              <span class="offer-date">{{ offer.createdAt | date:'short' }}</span>
             </div>
             <div class="offer-actions-menu">
               <span class="menu-dots" (click)="toggleOfferMenu(i)">...</span>
@@ -51,7 +51,7 @@
               </div>
             </div>
           </div>
-          <h3>{{ offer.title }}</h3>
+          <h3> {{ offer.offerType }} OFFER: {{ offer.position }} — {{ offer.duration }} — {{ offer.company }}</h3>
           <p class="offer-description"><strong>Description:</strong> {{ offer.description }}</p>
         </div>
       </div>
@@ -91,13 +91,13 @@
           <h1>Recent Posts</h1>
           <button (click)="toggleEditProfile()" class="edit-btn">Edit</button>
         </div>
-        <div class="post-list" *ngIf="posts.length > 0">
-          <div class="post" *ngFor="let post of posts; let i = index">
+        <div class="post-list" *ngIf="userPosts.length > 0">
+          <div class="post" *ngFor="let post of userPosts; let i = index">
             <div class="post-header">
               <img src="/profileimg.svg" alt="Profile Picture" class="profile-pic">
               <div>
-                <strong>{{ post.author }}</strong> {{ post.company }}
-                <span class="post-date">{{ post.date }}</span>
+                <strong>{{ post.creator?.firstName }} {{ post.creator?.lastName }}</strong> {{ post.creator?.company }}
+                <span class="post-date">{{ post.createdAt | date:'medium' }}</span>
               </div>
               <div class="post-actions-menu">
                 <span class="menu-dots" (click)="togglePostMenu(i)">...</span>
@@ -107,11 +107,11 @@
                 </div>
               </div>
             </div>
-            <p class="post-content">{{ post.content }}</p>
+            <p class="post-content">{{ post.description }}</p>
           </div>
         </div>
-        <p class="no-posts" *ngIf="posts.length === 0">No Available Posts</p>
-        <p class="prompt" *ngIf="posts.length === 0">Click Here to Publish Your First Post</p>
+        <p class="no-posts" *ngIf="userPosts.length === 0">No Available Posts</p>
+        <p class="prompt" *ngIf="userPosts.length === 0">Click Here to Publish Your First Post</p>
         <button (click)="showNewPost = true" class="post-btn">Post</button>
       </div>
       <div *ngIf="showEditProfile" class="edit-profile-container">
@@ -163,8 +163,10 @@
           <div class="form-group">
             <label>Duration</label>
             <select [(ngModel)]="duration">
-              <option value="6 months">6 months</option>
-              <option value="12 months">12 months</option>
+              <option value="Trimester">Trimester</option>
+              <option value="Semester">Semester</option>
+              <option value="Year">Year</option>
+              <option value="Extendable">Extendable</option>
             </select>
           </div>
           <div class="form-group">
@@ -198,7 +200,7 @@
           <button class="edit-btn">Edit</button>
         </div>
         <div class="post-composer">
-          <textarea [(ngModel)]="posts[editingPostIndex].content" placeholder="Edit your post"></textarea>
+          <textarea [(ngModel)]="editedDescription" placeholder="Edit your post"></textarea>
           <div class="post-actions">
             <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
             <button (click)="saveEdit()" class="post-btn">Save</button>
@@ -206,5 +208,65 @@
         </div>
       </div>
     </div>
+         <!-- Show Messages -->
+<div class="messages-section" *ngIf="showMessages">
+  <div class="conversations-list">
+    <h3>Messaging <span class="unread-count">{{ (conversations | filterConversationsWithUnread).length }}</span></h3>
+    <input type="text" placeholder="Search in dashboard..." class="search-bar messages-search">
+    
+    <div class="conversation-item" *ngFor="let convo of conversations" (click)="selectConversation(convo)">
+      <div class="user-info">
+        <img src="/profileimg.svg" alt="Profile Avatar" class="conversation-avatar">
+        <div>
+          <p class="conversation-user">
+            {{ convo.otherUser.name }}
+            <span class="user-role">{{ getSimpleRole(convo.role) }}</span>
+          </p>
+          <p class="last-message">
+            {{ convo.lastMessageContent ? (convo.lastMessageContent | slice:0:30) : 'No messages yet' }}
+            {{ convo.lastMessageContent && convo.lastMessageContent.length > 30 ? '...' : '' }}
+          </p>
+        </div>
+      </div>
+      <div class="conversation-meta">
+        <p class="conversation-time">{{ convo.lastMessageDate | timeAgo }}</p>
+        <span class="unread-dot" *ngIf="convo.unreadCount"></span>
+      </div>
+    </div>
   </div>
+
+  <div class="chat-area" *ngIf="selectedConversation">
+    <div class="chat-header">
+      <div class="user-info">
+        <img src="/profileimg.svg" alt="Profile Avatar" class="chat-avatar">
+        <div>
+          <p class="chat-user">{{ selectedConversation.otherUser.name }}</p>
+          <p class="chat-status"><span class="status-dot online"></span> Online</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chat-messages">
+      <div class="date-divider">Today</div>
+      
+      <div class="message" *ngFor="let msg of selectedConversation.messages">
+        <div class="message-content" [ngClass]="{'sent': msg.isCurrentUser, 'received': !msg.isCurrentUser}">
+          <p>{{ msg.content }}</p>
+          <span class="message-time">{{ msg.sentDate | timeAgo }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="message-input-bar">
+      <input
+        type="text"
+        [(ngModel)]="newMessageContent"
+        placeholder="Type your message..."
+        class="message-input"
+        (keydown.enter)="sendMessage()"
+      />
+      <button class="send-button" (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+</div>
 </div>

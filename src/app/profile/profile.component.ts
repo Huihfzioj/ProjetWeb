@@ -3,13 +3,56 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilterConversationsWithUnreadPipe } from './filter-conversations-with-unread.pipe';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { InfoDTO } from './InfoDTO';
+import { AuthService } from '../auth.service';
+import { ConversationDto } from '../models/conversation.dto';
+import { MessageDto } from '../models/message.dto';
+import { TimeAgoPipe } from '../shared/pipes/time-ago.pipe';
 
-
+export interface ConversationPreview {
+  id: number;
+  otherUser: {
+    id: number;
+    name: string;
+  };
+  lastMessageContent: string;
+  lastMessageDate: string;
+  unreadCount: number;
+  role: string; 
+}
+interface Message {
+  id: number;
+  content: string;
+  sentDate: string;
+  sender: {
+    id: number;
+    name: string;
+  };
+  isCurrentUser?: boolean;
+}
+interface Post {
+  id: number;
+  description: string;
+  createdAt: string;
+  type: 'Post' | 'Offer';
+  creator: {
+    firstName: string;
+    lastName: string;
+    company: string;
+  };
+}
+export interface Document {
+  description: string;
+  fileName: string;
+  fileType: string;
+  date: string;
+  fileUrl: string;
+}
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, FilterConversationsWithUnreadPipe,HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TimeAgoPipe, FilterConversationsWithUnreadPipe],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 
@@ -17,36 +60,176 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class ProfileComponent implements OnInit{ 
   user: any = {};
   userType: string = '';
-
-  constructor(private router: Router, private http: HttpClient) {}
-
-  ngOnInit(): void {
-    console.log('Initialisation du composant');
-    this.logDashboardData();
-    const navigation = this.router.getCurrentNavigation();
-    if (typeof window !== 'undefined') {
-      this.user = navigation?.extras.state?.['user'] ?? JSON.parse(localStorage.getItem('user') || '{}');
-      this.userType = navigation?.extras.state?.['userType'] ?? (localStorage.getItem('userType') || '');
-    }
-    console.log('user'+this.user);
-  }
-
   showAddForm: boolean = false;
   showEditForm: boolean = false;
   showMenu: boolean = false;
   showLatestOffers: boolean = false;
   showMessages: boolean = false;
   showDocuments: boolean = true; // Flag to toggle Documents visibility (default to true)
-  documents: { description: string, fileName: string, fileType: string, date: string, fileUrl?: string }[] = [];
   description: string = '';
   selectedFile: File | null = null;
   showDashboard = false;
-
-  // Properties for editable fields
   skills: string = 'Not specified';
-  specialty: string = 'NA';
+  speciality: string='NA';
   searchingFor: string = 'NA';
   graduationYear: string = '2027';
+  currentUserId!: number;
+  conversations: ConversationPreview[] = [];
+  selectedConversation: any = null;
+  newMessage: string = '';
+  documents: Document[] = [];
+  latestOffers: any[] = [];
+  constructor(private router: Router, private http: HttpClient,private authService : AuthService) {
+    console.log('Constructor called');
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      if (user?.id) {
+        this.currentUserId = user.id;
+        this.loadConversations();
+        this.loadStudentInfo(user.id);
+        this.loadDocuments();
+        this.loadFeed();
+        this.fetchTopEmployers();
+        this.fetchTopSkills();
+        this.fetchIndustryStats();
+      } else {
+        this.router.navigate(['/login']); // Redirect if not authenticated
+      }
+    });
+    this.authService.userType$.subscribe(userType => {
+      this.userType = userType;
+    });
+  }
+  loadConversations() {
+    console.log('Loading conversations for user:', this.currentUserId);
+  
+    this.http.get<any>(`http://localhost:8080/api/conversations/user/${this.currentUserId}`, {
+      params: {
+        currentUserId: this.currentUserId.toString(),
+        page: '0',
+        size: '20'
+      }
+    }).subscribe({
+      next: (response) => {
+        console.log('API Response:', response);
+  
+        this.conversations = response.content.map((convo: any) => ({
+          id: convo.id,
+          otherUser: convo.otherUser, 
+          lastMessageContent: convo.lastMessageContent,
+          lastMessageDate: convo.lastMessageDate,
+          unreadCount: convo.unreadCount,
+          role: convo.role
+        }));
+      },
+      error: (err) => {
+        console.error('API Error:', err);
+        alert('Failed to load conversations.');
+      }
+    });
+  }
+  fetchTopEmployers(): void {
+    this.http.get<any[]>('/api/dashboard/top-employers').subscribe(data => {
+      this.topEmployers = data;
+    });
+  }
+
+  fetchTopSkills(): void {
+    this.http.get<any[]>('/api/dashboard/top-skills').subscribe(data => {
+      this.topSkills = data;
+    });
+  }
+
+  fetchIndustryStats(): void {
+    this.http.get<any[]>('/api/dashboard/industry-stats').subscribe(data => {
+      this.industries = data;
+    });
+  }
+  selectConversation(conversation: ConversationPreview) {
+    this.showMessages = true;
+  
+    this.http.get<any>(`/api/conversations/${conversation.id}/messages`, {
+      params: new HttpParams()
+        .set('currentUserId', this.currentUserId)
+        .set('page', '0')
+        .set('size', '50')
+    }).subscribe({
+      next: (response) => {
+        this.selectedConversation = {
+          ...conversation,
+          messages: response.content
+            .map((msg: any) => ({
+              ...msg,
+              isCurrentUser: msg.sender.id === this.currentUserId
+            }))
+            .reverse()
+        };
+      },
+      error: (err) => {
+        console.error('Error loading messages:', err);
+      }
+    });
+  }
+  getTotalUnreadCount(): number {
+    return this.conversations.reduce((sum, convo) => sum + convo.unreadCount, 0);
+  }
+  getSimpleRole(role: string): string {
+    if (!role) return '';
+    const parts = role.split('.');
+    return parts[parts.length - 1];
+  }
+  newMessageContent: string = '';
+
+  sendMessage() {
+    if (!this.newMessageContent.trim() || !this.selectedConversation) return;
+  
+    const messagePayload = {
+      conversationId: this.selectedConversation.id,
+      senderId: this.currentUserId,
+      receiverId: this.selectedConversation.otherUser.id,
+      content: this.newMessageContent
+    };
+  
+    this.http.post<any>('http://localhost:8080/api/conversations/messages', messagePayload, {
+      params: { senderId: this.currentUserId }
+    }).subscribe({
+      next: (newMsg) => {
+        this.selectedConversation.messages.push({
+          ...newMsg,
+          isCurrentUser: true
+        });
+        this.newMessageContent = '';
+      },
+      error: (err) => {
+        console.error('Failed to send message:', err);
+        alert('Could not send the message.');
+      }
+    });
+  }
+  
+  loadStudentInfo(id: number): void {
+    this.http.get<InfoDTO>(`/api/students/${id}/info`).subscribe({
+      next: (info) => {
+        console.log('Loaded student info:', info);  // Log the response
+        this.skills = info.skill?.trim() ? info.skill : 'Not specified';
+        this.speciality = info.speciality?.trim() ? info.speciality : 'NA';
+        this.searchingFor = info.searchType?.trim() ? info.searchType : 'NA';
+        this.graduationYear = info.predictedGradYear && info.predictedGradYear !== 0
+          ? info.predictedGradYear.toString()
+          : '2027';
+      },
+      error: (error) => {
+        console.error('Failed to load student info:', error);
+      }
+    });
+  }
+  get fullName(): string {
+    if (!this.user) return '';
+    return `${this.user.firstName} ${this.user.lastName}`;
+  }
   // Ajoutez dans la partie des propriétés
 suggestedAlumni = [
   { name: 'Nadia Lauren', connected: false },
@@ -78,67 +261,10 @@ private resetAllViews() {
   this.showMenu = false;
 }
 // Dans profile.component.ts
-topSkills = [
-  { name: 'Data Analysis', percentage: 80 },
-  { name: 'Python', percentage: 70 },
-  { name: 'Project Management', percentage: 60 }
-];
 
-industries = [
-  { name: 'Technology', percentage: 30 },
-  { name: 'Healthcare', percentage: 15 },
-  { name: 'Finance', percentage: 20 },
-  { name: 'Others', percentage: 35 }
-];
-topEmployers = [
-  { logo: 'google-logo.svg', name: 'Google', sector: 'Technology', hires: 80, interns: 10 },
-  { logo: 'microsoft-logo.svg', name: 'Microsoft', sector: 'Technology', hires: 40, interns: 25 }
-];
-
-
-
-  // Mock data for Latest Offers
-  latestOffers: { user: string, role: string, date: string, description: string }[] = [
-    {
-      user: 'Alexa Rawles',
-      role: 'Developer @ XY',
-      date: 'Feb 10, 2025',
-      description: 'INTERNSHIP OFFER: DevOps Engineer—6 months—Vinci Construction\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum erat maximus, eleifend nunc vestibulum, auctor elit. Nulla non fringilla purus, id pharetra ipsum. Vivamus in molestie ligula. Aenean ornare urna vel massa pulvinar, et molestie lorem finibus. Integer in risus eu tortor varius auctor. Morbi sed ipsum in tortor pharetra, id pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Nam pulvinar, turpis nec convallis facilisis, velit felis lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mi lorem in tempor enim dui nec mi rutrum feugiat. Praesent luctus placerat faucibus. Cras tincidunt ut enim nec imperdiet. Nulla laoreet leo vel massa elementum, nec faucibus pharetra. Suspendisse gravida ante molestie, rhoncus nulla a, blandit dolor.'
-    },
-    {
-      user: 'Alexa Rawles',
-      role: 'Developer @ XY',
-      date: 'Feb 10, 2025',
-      description: 'INTERNSHIP OFFER: DevOps Engineer—6 months—Vinci Construction\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum erat maximus, eleifend nunc vestibulum, auctor elit. Nulla non fringilla purus, id pharetra ipsum. Vivamus in molestie ligula. Aenean ornare urna vel massa pulvinar, et molestie lorem finibus. Integer in risus eu tortor varius auctor. Morbi sed ipsum in tortor pharetra, id pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Aliquam nec justo vel felis ornare ipsum venenatis. Morbi enim neque, faucibus in eros est, sit amet pharetra diam. Nam pulvinar, turpis nec convallis facilisis, velit felis lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mi lorem in tempor enim dui nec mi rutrum feugiat. Praesent luctus placerat faucibus. Cras tincidunt ut enim nec imperdiet. Nulla laoreet leo vel massa elementum, nec faucibus pharetra. Suspendisse gravida ante molestie, rhoncus nulla a, blandit dolor.'
-    }
-  ];
-
-  // Mock data for Messages
-  conversations: { user: string, role: string, lastMessage: string, timeAgo: string, unreadCount?: number, messages: { sender: string, text: string, time: string }[] }[] = [
-    {
-      user: 'Foulen Ben Foulen',
-      role: 'Alumni',
-      lastMessage: "You're Welcome",
-      timeAgo: 'Now',
-      messages: [
-        { sender: 'Foulen Ben Foulen', text: 'Of course. Thank you so much for taking your time.', time: 'Today 11:56' },
-        { sender: 'You', text: 'Welcome.', time: 'Today 11:59' }
-      ]
-    },
-    {
-      user: 'Nadia Lauren',
-      role: '',
-      lastMessage: 'I think that looks good but you ...',
-      timeAgo: '5m Ago',
-      unreadCount: 1,
-      messages: []
-    }
-  ];
-
-  // Selected conversation for displaying messages
-  selectedConversation: any = null;
-
- 
+topEmployers: any[] = [];
+topSkills: any[] = [];
+industries: any[] = [];
 
   // Toggle document form visibility
   toggleAddForm() {
@@ -187,11 +313,6 @@ topEmployers = [
     this.showMessages = false;
   }
 
-  // Select a conversation to display messages
-  selectConversation(conversation: any) {
-    this.selectedConversation = conversation;
-  }
-
   // Handle file selection for document upload
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -204,44 +325,57 @@ topEmployers = [
   postDocument() {
     if (this.description && this.selectedFile instanceof File && this.user?.id) {
       const formData = new FormData();
+  
+      const currentDate = new Date(); 
+      const isoDate = currentDate.toISOString(); 
+  
       formData.append('document', this.selectedFile);
       formData.append('description', this.description);
       formData.append('name', this.selectedFile.name);
-     this.http.post(`/api/student/${this.user.id}/upload-document`, formData, { responseType: 'text' }).subscribe({
-      next: () => {
-        const currentDate = new Date();
-        const formattedDate = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        if(this.selectedFile!=null){
-          const fileUrl = URL.createObjectURL(this.selectedFile);
-          this.documents.push({
-            description: this.description,
-            fileName: this.selectedFile.name,
-            fileType: this.selectedFile.type.includes('pdf') ? 'PDF' : 'FILE',
-            date: formattedDate,
-            fileUrl: fileUrl
+      formData.append('date', isoDate);
+  
+      this.http.post(`/api/student/${this.user.id}/upload-document`, formData, { responseType: 'text' }).subscribe({
+        next: () => {
+          const formattedDate = currentDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
           });
-          this.description = '';
-          this.selectedFile = null;
-          this.showAddForm = false;
+  
+          if (this.selectedFile != null) {
+            const fileUrl = URL.createObjectURL(this.selectedFile);
+            this.documents.push({
+              description: this.description,
+              fileName: this.selectedFile.name,
+              fileType: this.selectedFile.type.includes('pdf') ? 'PDF' : 'FILE',
+              date: formattedDate,
+              fileUrl: fileUrl
+            });
+            this.description = '';
+            this.selectedFile = null;
+            this.showAddForm = false;
+          }
+        },
+        error: (error) => {
+          console.error('Document upload failed:', error);
+          alert('Failed to upload document');
         }
-  },
-  error: (error) => {
-    console.error('Document upload failed:', error);
-    alert('Failed to upload document');
-  }
-});
+      });
     } else {
       alert('Please fill all required fields');
     }
   }
   loadDocuments() {
     if (this.user?.id) {
-      this.http.get(`/api/student/${this.user.id}/documents`).subscribe({
-        next: (docs: any) => {
-          this.documents = docs;
+      this.http.get<any[]>(`/api/student/${this.user.id}/documents`).subscribe({
+        next: (docs) => {
+          this.documents = docs.map(doc => ({
+            ...doc,
+            fileUrl: doc.downloadUrl 
+          }));
         },
         error: (err) => {
-          console.error('Error loading documents:', err);
+          console.error('Error loading document:', err);
         }
       });
     }
@@ -332,4 +466,25 @@ topEmployers = [
       industries: this.industries,
       suggestedAlumni: this.suggestedAlumni
     });
-}}
+  }
+  feedPosts : Post[]=[];
+  loadFeed(): void {
+    const userId = this.user?.id;
+    if (!userId) {
+      alert("User not authenticated");
+      return;
+    }
+  
+    this.http.get<any[]>(`http://localhost:8080/api/feed/${userId}`)
+      .subscribe({
+        next: (data) => {
+          this.latestOffers = data.filter(item => item.type === 'Offer');
+          this.feedPosts = data.filter(item => item.type === 'Post');
+        },
+        error: (err) => {
+          console.error('Failed to load feed:', err);
+          alert("Error loading feed");
+        }
+      });
+  }
+}

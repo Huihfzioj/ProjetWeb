@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,11 +18,14 @@ export class LoginComponent {
     email: '',
     password: ''
   };
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private authService : AuthService) {}
   onLogin(): void {
     const loginData = this.login;
   
-    this.http.get(`/api/auth/user-type?email=${loginData.email}`, { responseType: 'text' }).subscribe({
+    // First get user type with proper type handling
+    this.http.get<string>(`/api/auth/user-type?email=${loginData.email}`, { 
+      responseType: 'text' as 'json' 
+    }).subscribe({
       next: (userType: string) => {
         let endpoint = '';
         let route = '';
@@ -37,19 +41,17 @@ export class LoginComponent {
           return;
         }
   
-        this.http.post(endpoint, loginData).subscribe({
+        // Then make login request
+        this.http.post<any>(endpoint, loginData).subscribe({
           next: (response: any) => {
             console.log('Login successful:', response);
-            
-            // Save to localStorage
-            localStorage.setItem('user', JSON.stringify(response));
-            localStorage.setItem('userType', userType);
-        
+            this.authService.setUser(response);
+            this.authService.setUserType(userType);
             this.router.navigate([route]);
           },
           error: (error) => {
             console.error('Login error:', error);
-            alert('Login failed: ' + error.error.message);
+            alert('Login failed: ' + error.error?.message || error.message);
           }
         });
       },
@@ -58,5 +60,5 @@ export class LoginComponent {
         alert('No account found with this email.');
       }
     });
-}
+  }
 }
